@@ -1,0 +1,452 @@
+export const MONTOS_FIJOS_ACTIVIDAD = {
+    // MAC
+    "6a3eb0dbc63d5a6904c46d6d": {
+        q_57: [
+            16408.1,   
+            30997.06,     
+            47828.31,
+            31101.31526	,
+            29187,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d6e": {
+        q_57: [
+            0,   
+            0,   
+            0,  
+            0,    
+            3340, 
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d6f": {
+        q_57: [
+            3880.79,   
+            4345,   
+            0,  
+            11609.53,    
+            3169, 
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d70": {
+        q_57: [
+            0,   
+            0,   
+            0,  
+            3169,    
+            0, 
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d71": {
+        q_57: [
+            0,   
+            0,     
+            0,
+            0,
+            0,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d72": {
+        q_57: [
+            0,   
+            4450,     
+            30669.54537,
+            42324.61,
+            49707.806,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d73": {
+        q_57: [
+            0,   
+            0,     
+            0,
+            0,
+            0,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d74": {
+        q_57: [
+            0,   
+            0,     
+            0,
+            0,
+            12142.63,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d75": {
+        q_57: [
+            0,   
+            0,     
+            0,
+            24006.79,
+            16442.38,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d76": {
+        q_57: [
+            0,   
+            0,     
+            0,
+            0,
+            0,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d77": {
+        q_57: [
+            0,   
+            0,     
+            0,
+            0,
+            0,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d78": {
+        q_57: [
+            0,   
+            0,     
+            0,
+            0,
+            0,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    // EXP
+    "6a3eb0dbc63d5a6904c46d79": {
+        q_57: [
+            0,   
+            1106.76,
+            0,
+            1807.36,
+            2101.77,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d7a": {
+        q_57: [
+            0,   
+            0,     
+            0,
+            0,
+            0,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d7b": {
+        q_57: [
+            0,   
+            0,     
+            0,
+            0,
+            0,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d7c": {
+        q_57: [
+            0,   
+            0,     
+            0,
+            0,
+            0,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d7d": {
+        q_57: [
+            1486.98,   
+            2891.64,     
+            8879.56,
+            34398.76,
+            36279.06,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d7e": {
+        q_57: [
+            4549.71,   
+            6570.15,     
+            6781.03,
+            5709.75,
+            2168.21,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d7f": {
+        q_57: [
+            0,   
+            0,     
+            0,
+            0,
+            0,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d80": {
+        q_57: [
+            0,   
+            0,     
+            0,
+            0,
+            0,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d81": {
+        q_57: [
+            0,   
+            0,     
+            0,
+            0,
+            0,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d82": {
+        q_57: [
+            10556.62,   
+            3643.96,     
+            4342.22,
+            2012.62,
+            3434.72,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d83": {
+        q_57: [
+            0,   
+            0,     
+            0,
+            0,
+            6285,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d84": {
+        q_57: [
+            0,   
+            0,     
+            0,
+            0,
+            0,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d85": {
+        q_57: [
+            0,   
+            0,     
+            0,
+            0,
+            0,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d86": {
+        q_57: [
+            0,   
+            0,     
+            0,
+            0,
+            4364,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d87": {
+        q_57: [
+            0,   
+            0,     
+            0,
+            0,
+            0,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    },
+    "6a3eb0dbc63d5a6904c46d88": {
+        q_57: [
+            0,   
+            0,     
+            743.49,
+            2262.74,
+            793.65,
+            null,   // Junio calcula normal
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ],
+    }
+};

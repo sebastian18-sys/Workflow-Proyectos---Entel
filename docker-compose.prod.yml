@@ -1,0 +1,22 @@
+# services:
+#   web:
+#     build:
+#       dockerfile: ./deploy/Dockerfile
+#       target: runtime
+#     image: wf_front:1.0.0
+#     ports:
+#       - "0.0.0.0:8080:80" 
+#     restart: always
+
+# NEW
+services:
+  web:
+    build:
+      dockerfile: ./deploy/Dockerfile
+      target: runtime
+    image: wf_front:1.0.0
+    ports:
+      - "8080:80"
+      - "80:80"
+      - "443:443"
+    restart: always
