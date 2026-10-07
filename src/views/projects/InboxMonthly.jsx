@@ -27,7 +27,8 @@ import {
 
 import {
     Link,
-    useNavigate
+    useNavigate,
+    useOutletContext
 } from "react-router"
 
 import { Button } from "@/components/ui/button"
@@ -636,17 +637,11 @@ function formatInboxDate(
 
 export default function InboxMonthly() {
 
+    const { isCollapsed = false } = useOutletContext() || {}
     const { user } = useAuth()
-
     const navigate = useNavigate()
 
-
-    /*
-     * =========================================================
-     * TABLE TOOL
-     * =========================================================
-     */
-
+    // TOOL
     const {
         sortBy,
         setSortBy,
@@ -662,48 +657,15 @@ export default function InboxMonthly() {
         defaultSortBy: "forecast_date"
     })
 
+    const [month, setMonth] = useState(getCurrentMonth())
 
-    /*
-     * =========================================================
-     * PLAN PARAMETERS
-     * =========================================================
-     */
+    const [forecastType, setForecastType] = useState("RESPONSIBLE")
+    const [selectedTask, setSelectedTask] = useState("ALL")
 
-    const [month, setMonth] = useState(
-        getCurrentMonth()
-    )
+    // SEARCH
+    const [filters, setFilters] = useState({ search: "" })
 
-    const [
-        forecastType,
-        setForecastType
-    ] = useState(
-        "RESPONSIBLE"
-    )
-
-    const [
-        selectedTask,
-        setSelectedTask
-    ] = useState("ALL")
-
-
-    /*
-     * =========================================================
-     * SEARCH
-     * =========================================================
-     */
-
-    const [filters, setFilters] =
-        useState({
-            search: ""
-        })
-
-
-    /*
-     * =========================================================
-     * FILTER OPTIONS
-     * =========================================================
-     */
-
+    // FILTER OPTIONS
     const { filterOptions } = useOptionsFilter({
         request: getInboxOptions,
         debugName: "getInboxMonthlyOptions"
@@ -714,51 +676,20 @@ export default function InboxMonthly() {
     const availableFilters =
         useMemo(() => [
             {
-                id:
-                    "workflow_code",
-
-                label:
-                    "Workflow",
-
-                type:
-                    "select",
-
-                icon:
-                    Workflow,
-
-                options:
-                    filterOptions
-                        .workflow_code ||
-                    []
+                id: "workflow_code",
+                label: "Workflow",
+                type: "select",
+                icon: Workflow,
+                options: filterOptions.workflow_code || []
             },
             {
-                id:
-                    "task_status",
-
-                label:
-                    "Estado tarea",
-
-                type:
-                    "select",
-
-                icon:
-                    CircleDot,
-
-                options:
-                    filterOptions
-                        .task_status ||
-                    []
+                id: "task_status",
+                label: "Estado tarea",
+                type: "select",
+                icon: CircleDot,
+                options: filterOptions.task_status || []
             }
-        ], [
-            filterOptions
-        ])
-
-
-    /*
-     * =========================================================
-     * ADVANCED FILTERS
-     * =========================================================
-     */
+        ], [filterOptions])
 
     const {
         activeAdvancedFilters,
@@ -769,41 +700,16 @@ export default function InboxMonthly() {
         userKey: user?.email
     })
 
-
-    const advancedFilters =
-        useMemo(
-            () =>
-                activeFiltersToParams(
-                    activeAdvancedFilters
-                ),
-            [
-                activeAdvancedFilters
-            ]
-        )
-
+    const advancedFilters = useMemo(() =>
+        activeFiltersToParams(activeAdvancedFilters), 
+    [activeAdvancedFilters])
 
     const advancedFiltersKey =
         useMemo(() => JSON.stringify(advancedFilters),
-            [
-                advancedFilters
-            ]
+            [advancedFilters]
         )
 
-
-    /*
-     * =========================================================
-     * SEARCH DEBOUNCE
-     * =========================================================
-     */
-
     const debouncedSearch = useDebounce(filters.search, 300)
-
-
-    /*
-     * =========================================================
-     * RESET PAGE
-     * =========================================================
-     */
 
     useEffect(() => {
         setCurrentPage(1)
@@ -819,13 +725,7 @@ export default function InboxMonthly() {
         setCurrentPage
     ])
 
-
-    /*
-     * =========================================================
-     * QUERY PARAMS
-     * =========================================================
-     */
-
+    // QUERY PARAMS
     const queryParams =
         useMemo(() => ({
             user_id: String(user?.id || ""),
@@ -856,13 +756,7 @@ export default function InboxMonthly() {
             advancedFilters
         ])
 
-
-    /*
-     * =========================================================
-     * DATA
-     * =========================================================
-     */
-
+    // DATA
     const {
         monthly,
         summary,
@@ -873,163 +767,101 @@ export default function InboxMonthly() {
         reload
     } = useInboxMonthly(queryParams)
 
-
-    /*
-     * =========================================================
-     * ACTION
-     * =========================================================
-     */
-
     const openActivity = item => {
 
-        if (
-            item.availability ===
-            "WAITING_PREVIOUS_TASK"
-        ) {
+        if (item.availability === "WAITING_PREVIOUS_TASK") {
             return
         }
 
-        navigate(
-            `/workflow/inbox/details/${item.instance_id}`
-        )
+        navigate(`/workflow/inbox/details/${item.instance_id}`)
     }
 
     return (
-        <div className="flex flex-col items-center px-4 md:px-6 mt-14 lg:px-8 py-5 md:pt-6 lg:pt-8 lg:pb-12">
-            <div className="flex min-h-full w-full max-w-[1600px] flex-col">
+        <div className="flex flex-col px-4 mt-14 py-5 md:pt-6 md:px-6 lg:pt-8 lg:px-8 lg:pb-12 xl:px-10 2xl:px-14">
+            <div className="flex min-h-full w-full min-w-0 flex-col">
 
-                {/* =================================================
-                    NAV TABS
-                ================================================= */}
-
-                <div className="flex flex-col items-center px-4 md:px-6 lg:px-8 bg-white fixed top-18 right-0 left-0 z-10 -mt-px h-14 border-b xl:left-60 2xl:top-20 2xl:left-72">
-
-                    <div className="flex min-h-full w-full max-w-[1400px] flex-col">
-
+                <div className={`fixed top-18 right-0 left-0 z-10 -mt-px flex h-14 flex-col items-center border-b bg-white px-4 md:px-6 lg:px-8 2xl:top-20 xl:px-10 2xl:px-14
+                    ${
+                        isCollapsed
+                            ? "xl:left-16 2xl:left-16"
+                            : "xl:left-60 2xl:left-72"
+                    }`}
+                >
+                    <div className="flex min-h-full w-full flex-col">
                         <div className="relative h-full border-t border-gray-100 dark:border-gray-300/50">
-
                             <div className="no-scrollbar mr-14 flex h-full gap-2 overflow-hidden lg:gap-4 pointer-coarse:-mx-4 pointer-coarse:overflow-scroll pointer-coarse:px-4 md:pointer-coarse:-mx-6 md:pointer-coarse:px-6 lg:pointer-coarse:-mx-8 lg:pointer-coarse:px-8">
 
-
                                 {/* MI BANDEJA */}
-
                                 <div>
-
                                     <Link
                                         to="/projects/inbox"
                                         className="group inline-flex h-full cursor-pointer items-center border-b-[3px] focus:outline-hidden text-gray-500 hover:text-darktext border-transparent"
                                     >
-
                                         <div className="flex items-center gap-2 rounded-lg px-2 py-1.5 leading-6 font-medium whitespace-nowrap group-hover:bg-gray-100">
-
                                             <InboxIcon />
-
                                             Mi bandeja
-
                                         </div>
-
                                     </Link>
-
                                 </div>
 
-
                                 {/* HISTORIAL */}
-
                                 <div>
-
                                     <Link
                                         to="/projects/inbox/history"
                                         className="group inline-flex h-full cursor-pointer items-center border-b-[3px] focus:outline-hidden text-gray-500 hover:text-darktext border-transparent"
                                     >
-
                                         <div className="flex items-center gap-2 rounded-lg px-2 py-1.5 leading-6 font-medium whitespace-nowrap group-hover:bg-gray-100">
-
                                             <HistoryIcon />
-
                                             Historial
-
                                         </div>
-
                                     </Link>
-
                                 </div>
 
-
                                 {/* PLAN MENSUAL */}
-
                                 <div>
-
                                     <Link
                                         aria-current="page"
                                         to="/projects/inbox/monthly"
                                         className="router-link-active router-link-exact-active group inline-flex h-full cursor-pointer items-center border-b-[3px] focus:outline-hidden border-[#2b7fff] text-[#2b7fff] hover:text-[#2b7fff]"
                                     >
-
                                         <div className="flex items-center gap-2 rounded-lg px-2 py-1.5 leading-6 font-medium whitespace-nowrap group-hover:bg-gray-100">
-
                                             <ProjectorIcon />
-
                                             Plan Mensual
-
                                         </div>
-
                                     </Link>
-
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
 
                 {/* =================================================
                     HEADER
                 ================================================= */}
-
                 <div className="flex justify-between gap-4 mb-5 md:mb-6 lg:mb-8">
-
                     <div className="flex gap-4 items-center">
-
                         <a
                             href="#"
                             title="Atrás"
                             className="bg-white flex size-8 flex-none items-center justify-center self-start rounded-full text-gray-400 hover:text-[#2b7fff] lg:size-10"
                         >
-
                             <ArrowLeft className="h-5 w-5" />
-
                         </a>
-
-
                         <div>
-
                             <h2 className="text-2xl font-semibold text-[#2b7fff]">
                                 Plan Mensual
                             </h2>
-
                             <div className="mt-1 text-sm text-gray-500">
                                 Sitios previstos según el forecast seleccionado.
                             </div>
-
                         </div>
-
                     </div>
-
-
                     <Button
                         variant="outline"
                         size="sm"
-                        onClick={
-                            reload
-                        }
-                        disabled={
-                            loading
-                        }
+                        onClick={reload}
+                        disabled={loading}
                     >
-
                         <RefreshCw
                             className={`mr-2 h-4 w-4 ${
                                 loading
@@ -1037,119 +869,71 @@ export default function InboxMonthly() {
                                     : ""
                             }`}
                         />
-
                         Actualizar
-
                     </Button>
-
                 </div>
 
                 <div>
-
                     <div className="relative">
-
-                        <div className="rounded-2xl bg-white p-8 relative">
-
+                        <div className="relative rounded-2xl bg-white p-4 md:p-5 lg:p-6">
                             <div className="relative">
-
                                 <div className="relative min-h-44">
-
                                     <div className="contain-inline-size">
-
-                                        {/* =====================================
-                                            PLAN SELECTORS
-                                        ===================================== */}
-
+                
                                         <div className="grid grid-cols-1 gap-4 border-b border-slate-100 pb-6 md:grid-cols-3">
 
-
                                             {/* TASK */}
-
                                             <div className="space-y-2">
-
                                                 <label className="text-xs font-medium text-slate-500">
                                                     Tarea
                                                 </label>
-
                                                 <Select
-                                                    value={
-                                                        selectedTask
-                                                    }
-                                                    onValueChange={
-                                                        setSelectedTask
-                                                    }
+                                                    value={selectedTask}
+                                                    onValueChange={setSelectedTask}
                                                 >
-
                                                     <SelectTrigger>
-
                                                         <SelectValue placeholder="Todas las tareas" />
-
                                                     </SelectTrigger>
-
                                                     <SelectContent>
-
                                                         <SelectItem value="ALL">
                                                             Todas las tareas
                                                         </SelectItem>
-
                                                         {taskOptions.map(
                                                             option => (
                                                                 <SelectItem
-                                                                    key={
-                                                                        option.value ||
-                                                                        option
-                                                                    }
-                                                                    value={
-                                                                        option.value ||
-                                                                        option
+                                                                    key={option.value || option}
+                                                                    value={option.value || option
                                                                     }
                                                                 >
-                                                                    {
-                                                                        option.label ||
-                                                                        option
-                                                                    }
+                                                                    {option.label || option}
                                                                 </SelectItem>
                                                             )
                                                         )}
-
                                                     </SelectContent>
-
                                                 </Select>
-
                                             </div>
 
-
                                             {/* MONTH */}
-
                                             <div className="space-y-2">
-
                                                 <label className="text-xs font-medium text-slate-500">
                                                     Mes
                                                 </label>
-
                                                 <Input
                                                     type="month"
-                                                    value={
-                                                        month
-                                                    }
+                                                    value={month}
                                                     onChange={e =>
                                                         setMonth(
                                                             e.target.value
                                                         )
                                                     }
                                                 />
-
                                             </div>
 
-
                                             {/* FORECAST */}
-
                                             <div className="space-y-2">
-
                                                 <label className="text-xs font-medium text-slate-500">
                                                     Forecast a consultar
                                                 </label>
-
                                                 <Select
                                                     value={
                                                         forecastType
@@ -1406,83 +1190,50 @@ export default function InboxMonthly() {
                                                                         }
                                                                     </strong>
 
-
                                                                     <button
                                                                         type="button"
                                                                         onClick={() =>
-                                                                            removeAdvancedFilter(
-                                                                                filter.id
-                                                                            )
+                                                                            removeAdvancedFilter(filter.id)
                                                                         }
                                                                         className="absolute right-px rounded-full p-1.25 opacity-75 transition-all hover:opacity-100"
                                                                     >
-
                                                                         <X className="h-4 w-4" />
-
                                                                     </button>
-
                                                                 </div>
-
                                                             </div>
-
                                                         )
                                                     )}
-
                                                 </div>
-
                                             )}
-
                                         </div>
 
 
                                         {/* =====================================
                                             TABLE
                                         ===================================== */}
-
-                                        <div className="max-h-[580px] overflow-auto">
-
-                                            <Table>
-
-
+                                        <div className="w-full max-h-[calc(100vh-360px)] overflow-auto">
+                                            <Table className="w-full min-w-[1050px]">
                                                 {/* HEADER */}
-
                                                 <TableHeader className="sticky top-0 z-20 bg-slate-50">
-
                                                     <TableRow>
-
                                                         {columns.map(
                                                             column =>
-                                                                visibleColumns[
-                                                                    column.id
-                                                                ] ? (
-
+                                                                visibleColumns[column.id] ? (
                                                                     <TableHead
-                                                                        key={
-                                                                            column.id
-                                                                        }
+                                                                        key={column.id}
                                                                         className="whitespace-nowrap text-xs uppercase text-slate-500"
                                                                     >
-                                                                        {
-                                                                            column.label
-                                                                        }
+                                                                        {column.label}
                                                                     </TableHead>
-
                                                                 ) : null
                                                         )}
-
                                                         <TableHead className="w-12" />
-
                                                     </TableRow>
-
                                                 </TableHeader>
 
-
                                                 {/* BODY */}
-
                                                 <TableBody>
-
                                                     {loading ? (
-
                                                         Array.from({
                                                             length: 5
                                                         }).map(

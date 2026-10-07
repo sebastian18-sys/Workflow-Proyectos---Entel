@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useProjectsCapex } from "@/hooks/budget/capex/useProjectsCapex";
 import { formatCurrency, formatCurrencyWithoutDecimals, unique } from "@/lib/helpers";
 import MultiSelectFilter from "@/components/ui/_multiselect3";
-import { Link } from "react-router";
+import { Link, useOutletContext } from "react-router";
 import SelectFilter from "@/components/ui/_select3";
 
 const columns = [
@@ -44,7 +44,7 @@ function useFilters(data) {
 	const [unidadFuncional, setUnidadFuncional] = useState([]);
 	const [categoria, setCategoria] = useState([]);
 	const [fcst, setFcst] = useState("7+5");
-	const [mes, setMes] = useState("Setiembre");
+	const [mes, setMes] = useState("Octubre");
 
 	// Helper: Apply filters
 	const apply = (omit) => (d) => {
@@ -86,6 +86,8 @@ function useFilters(data) {
 
 export default function ComplianceLeadership() {
 
+	const { isCollapsed = false } = useOutletContext() || {}
+
     const {
         sortBy,
         setSortBy,
@@ -109,10 +111,6 @@ export default function ComplianceLeadership() {
 
     const flt = useFilters(projects);
 
-	// console.log("flt real", flt)
-	// console.log("flt", flt.filtered)
-	// console.log(projects)
-
 	const targetMonth = flt.mes;
 	const fcstKey = flt.fcst
 
@@ -123,12 +121,8 @@ export default function ComplianceLeadership() {
 
 	const { trimestres: mockNestedData, grandTotal } = triData
 
-	// console.log("mockNestedData", mockNestedData)
-
     const totalResults = mockNestedData.length ?? 0
 	const totalPages = Math.max(1, Math.ceil(totalResults / itemsPerPage));
-
-    console.log(mockNestedData)
 
 	const toggleTrimestre = (trimestreId) => {
 		setExpandedTrimestres((prev) => {
@@ -167,12 +161,18 @@ export default function ComplianceLeadership() {
 	}
 
     return (
-        <div className="flex flex-col items-center px-4 md:px-6 mt-14 lg:px-8 py-5 md:pt-6 lg:pt-8 lg:pb-12">
-			<div className="flex min-h-full w-full max-w-[1400px] flex-col">
+        <div className="flex flex-col px-4 mt-14 py-5 md:pt-6 md:px-6 lg:pt-8 lg:px-8 lg:pb-12 xl:px-10 2xl:px-14">
+			<div className="flex min-h-full w-full min-w-0 flex-col">
 
 				{/* NAV TABS */}
-				<div className="flex flex-col items-center px-4 md:px-6 lg:px-8 bg-white fixed top-18 right-0 left-0 z-10 -mt-px h-14 border-b xl:left-60 2xl:top-20 2xl:left-72">
-					<div className="flex min-h-full w-full max-w-[1400px] flex-col">
+				<div className={`fixed top-18 right-0 left-0 z-10 -mt-px flex h-14 flex-col items-center border-b bg-white px-4 md:px-6 lg:px-8 2xl:top-20 xl:px-10 2xl:px-14
+                    ${
+                        isCollapsed
+                            ? "xl:left-16 2xl:left-16"
+                            : "xl:left-60 2xl:left-72"
+                    }`}
+                >
+					<div className="flex min-h-full w-full flex-col">
 						<div className="relative h-full border-t border-gray-100 dark:border-gray-300/50">
 							<div className="no-scrollbar mr-14 flex h-full gap-2 overflow-hidden lg:gap-4 pointer-coarse:-mx-4 pointer-coarse:overflow-scroll pointer-coarse:px-4 md:pointer-coarse:-mx-6 md:pointer-coarse:px-6 lg:pointer-coarse:-mx-8 lg:pointer-coarse:px-8">
 								<div className="">

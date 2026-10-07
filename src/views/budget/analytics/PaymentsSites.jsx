@@ -21,7 +21,7 @@ import { getOCbyProjects } from "@/services/capex/getOCbyProjects";
 import { getOCOptions } from "@/services/getOptionsFilters";
 import { ArrowLeft, Briefcase, Building2, FileText, FolderKanban, GalleryHorizontalEnd, Hash, ListCollapse, Search, Ticket, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router";
+import { Link, useOutletContext } from "react-router";
 
 const TABLE_ID = "payments_sites"
 
@@ -105,6 +105,8 @@ const getColumnClass = (id, isHeader = false) => {
 };
 
 export default function PaymentsSites() {
+
+    const { isCollapsed = false } = useOutletContext() || {}
 
     const { user } = useAuth()
     const { identifiers } = useIdentifers()
@@ -230,19 +232,19 @@ export default function PaymentsSites() {
         }
     })
 
-    // const removeAdvancedFilter = (filterId) => {
-    //     setActiveAdvancedFilters((prev) =>
-    //         prev.filter((filter) => filter.id !== filterId)
-    //     );
-    // };
-
     return (
-        <div className="flex flex-col items-center px-4 md:px-6 mt-14 lg:px-8 py-5 md:pt-6 lg:pt-8 lg:pb-12">
-            <div className="flex min-h-full w-full max-w-[1400px] flex-col">
+        <div className="flex flex-col px-4 mt-14 py-5 md:pt-6 md:px-6 lg:pt-8 lg:px-8 lg:pb-12 xl:px-10 2xl:px-14">
+            <div className="flex min-h-full w-full min-w-0 flex-col">
 
                 {/* NAV TABS */}
-                <div className="flex flex-col items-center px-4 md:px-6 lg:px-8 bg-white fixed top-18 right-0 left-0 z-10 -mt-px h-14 border-b xl:left-60 2xl:top-20 2xl:left-72">
-                    <div className="flex min-h-full w-full max-w-[1400px] flex-col">
+                <div className={`fixed top-18 right-0 left-0 z-10 -mt-px flex h-14 flex-col items-center border-b bg-white px-4 md:px-6 lg:px-8 2xl:top-20 xl:px-10 2xl:px-14
+                    ${
+                        isCollapsed
+                            ? "xl:left-16 2xl:left-16"
+                            : "xl:left-60 2xl:left-72"
+                    }`}
+                >
+                    <div className="flex min-h-full w-full flex-col">
                         <div className="relative h-full border-t border-gray-100 dark:border-gray-300/50">
                             <div className="no-scrollbar mr-14 flex h-full gap-2 overflow-hidden lg:gap-4 pointer-coarse:-mx-4 pointer-coarse:overflow-scroll pointer-coarse:px-4 md:pointer-coarse:-mx-6 md:pointer-coarse:px-6 lg:pointer-coarse:-mx-8 lg:pointer-coarse:px-8">
                                 <div className="">
@@ -282,7 +284,7 @@ export default function PaymentsSites() {
                 {/* Main */}
                 <div>
                     <div className="relative">
-                        <div className="rounded-2xl bg-white p-8 relative">
+                        <div className="relative rounded-2xl bg-white p-4 md:p-5 lg:p-6">
                             <div className="relative">
                                 <div className="relative min-h-44">
                                     <div className="contain-inline-size">
@@ -397,8 +399,8 @@ export default function PaymentsSites() {
                                         </div>
 
                                         {/* Table */}
-                                        <div className="max-h-[520px] overflow-auto">
-                                            <Table className="">
+                                        <div className="w-full max-h-[calc(100vh-360px)] overflow-auto">
+                                            <Table className="w-full min-w-[1050px]">
                                                 <TableHeader className="sticky top-0 z-20 backdrop-blur border-b-2">
                                                     <TableRow className="h-8 bg-slate-50/90  hover:bg-slate-50/90">
                                                     {columns.map(

@@ -235,9 +235,8 @@ export default function ExecutionBudget() {
     } = useProjectsCapexTable(queryParams);
 
     return (
-        //  mt-14  ->
-        <div className="flex flex-col items-center px-4 md:px-6 lg:px-8 py-5 md:pt-6 lg:pt-8 lg:pb-12">
-            <div className="flex min-h-full w-full max-w-[1400px] flex-col">
+        <div className="flex flex-col px-4 py-5 md:pt-6 md:px-6 lg:pt-8 lg:px-8 lg:pb-12 xl:px-10 2xl:px-14">
+            <div className="flex min-h-full w-full min-w-0 flex-col">
                 {/* Breadcrumb */}
                 <div className="flex gap-4 mb-5 md:mb-6 lg:mb-8">
                     <a 
@@ -253,7 +252,7 @@ export default function ExecutionBudget() {
                 {/* Main */}
                 <div>
                     <div className="relative">
-                        <div className="rounded-2xl bg-white p-8 relative">
+                        <div className="relative rounded-2xl bg-white p-4 md:p-5 lg:p-6">
 
                             <div className="relative">
 
@@ -369,22 +368,9 @@ export default function ExecutionBudget() {
                                         </div>
 
                                         {/* Table */}
-                                        <div className="max-h-[520px] overflow-auto">
-                                            <Table>
-                                                {/* <TableHeader className="sticky top-0 z-20 bg-white backdrop-blur shadow-sm border-b-2">
-                                                    <TableRow className="bg-slate-50/90 hover:bg-slate-50/90">
-                                                    {columns.map(
-                                                        (column) =>
-                                                        visibleColumns[column.id] && (
-                                                            <TableHead key={column.id} className="whitespace-nowrap">
-                                                                <button className="flex items-center text-[#64748B] uppercase text-center gap-3 hover:text-foreground transition-colors">
-                                                                    {column.label}
-                                                                </button>
-                                                            </TableHead>
-                                                        ),
-                                                    )}
-                                                    </TableRow>
-                                                </TableHeader> */}
+                                        <div className="w-full max-h-[calc(100vh-360px)] overflow-auto">
+                                            <Table className="w-full min-w-[1050px]">
+                                               
                                                 <TableHeader>
                                                     <TableRow className="h-8 bg-slate-50/90  hover:bg-slate-50/90">
                                                     {columns.map(
@@ -393,7 +379,6 @@ export default function ExecutionBudget() {
                                                             <TableHead
                                                                 key={column.id} 
                                                                 style={getStickyStyle(column.id)}
-                                                                // className="whitespace-nowrap"
                                                                 className={cn(
                                                                     "sticky top-0 z-20 bg-slate-50 text-[#64748B] backdrop-blur border-b-2",
                                                                     getColumnClass(column.id, true)

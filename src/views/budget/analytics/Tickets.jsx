@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react"
-import { Link } from "react-router"
+import { Link, useOutletContext } from "react-router"
 import Dropzone from "@/components/drag_drop/drag_drop"
 import FilterAdvanced from "@/components/Filters/FilterAdvanced"
 import { StatusModal } from "@/components/StatusModal/StatusModal"
@@ -187,12 +187,6 @@ function FormNewTicket({ showAlert, user, addTickets }) {
                     const total_cot = cantidad * precio_unitario
                     const descrip_adi = identificador + " / " + (sitios.site ?? "") + " / " + actividad + " / " + solucion
 
-                    // mas de 3 sitios -> proyecto y línea
-                    // FCST
-                    // usuarios requisitores
-
-                    // const nro_rq = acuerdo_compras + proveedor + (sitios?.nombre_proyecto ?? "") + linea_inversion
-
                     const nro_rq = [
                         acuerdo_compras ?? "",
                         proveedor_final ?? "",
@@ -328,6 +322,7 @@ function FormNewTicket({ showAlert, user, addTickets }) {
             <DialogTrigger asChild>
                 <Button size="icon" className="cursor-pointer items-center justify-center rounded-lg align-middle font-medium transition-colors focus:outline-2 focus:outline-solid text-violet-900 hover:text-violet-900 bg-blue-500 hover:bg-blue-400 focus:outline-offset-2 outline-blue-300 dark:text-violet-100 dark:hover:text-violet-100 text-sm leading-6 px-3 py-2 gap-2 inline-flex w-10 2xl:w-auto">
                     <Plus className="h-6 w-6 text-white" />
+                    <span className="text-white">Solicitar RQ</span>
                 </Button>
             </DialogTrigger>
             <DialogContent className="p-0 sm:max-w-3xl max-h-[85vh] overflow-hidden">
@@ -421,6 +416,8 @@ function FormNewTicket({ showAlert, user, addTickets }) {
 
 
 export default function Tickets() {
+
+    const { isCollapsed = false } = useOutletContext() || {}
 
     const { can } = useAuthz()
     const { user } = useAuth()
@@ -559,18 +556,18 @@ export default function Tickets() {
         addTickets
     } = useTickets(ticketParams);
 
-
-    // let { workflows } = useWorkflows({ page: 1, limit: 1000 })
-
-    // console.log("workflows", workflows)
-
-
     return (
-        <div className="flex flex-col items-center px-4 md:px-6 mt-14 lg:px-8 py-5 md:pt-6 lg:pt-8 lg:pb-12">
-            <div className="flex min-h-full w-full max-w-[1400px] flex-col">
+        <div className="flex flex-col px-4 mt-14 py-5 md:pt-6 md:px-6 lg:pt-8 lg:px-8 lg:pb-12 xl:px-10 2xl:px-14">
+            <div className="flex min-h-full w-full min-w-0 flex-col">
                 {/* NAV TABS */}
-                <div className="flex flex-col items-center px-4 md:px-6 lg:px-8 bg-white fixed top-18 right-0 left-0 z-10 -mt-px h-14 border-b xl:left-60 2xl:top-20 2xl:left-72">
-                    <div className="flex min-h-full w-full max-w-[1400px] flex-col">
+                <div className={`fixed top-18 right-0 left-0 z-10 -mt-px flex h-14 flex-col items-center border-b bg-white px-4 md:px-6 lg:px-8 2xl:top-20 xl:px-10 2xl:px-14
+                    ${
+                        isCollapsed
+                            ? "xl:left-16 2xl:left-16"
+                            : "xl:left-60 2xl:left-72"
+                    }`}
+                >
+                    <div className="flex min-h-full w-full flex-col">
                         <div className="relative h-full border-t border-gray-100 dark:border-gray-300/50">
                             <div className="no-scrollbar mr-14 flex h-full gap-2 overflow-hidden lg:gap-4 pointer-coarse:-mx-4 pointer-coarse:overflow-scroll pointer-coarse:px-4 md:pointer-coarse:-mx-6 md:pointer-coarse:px-6 lg:pointer-coarse:-mx-8 lg:pointer-coarse:px-8">
                                 <div className="">
@@ -608,7 +605,7 @@ export default function Tickets() {
                 {/* Main */}
                 <div>
                     <div className="relative">
-                        <div className="rounded-2xl bg-white p-8 relative">
+                        <div className="relative rounded-2xl bg-white p-4 md:p-5 lg:p-6">
                             <div className="relative">
                                 <div className="relative min-h-44">
                                     <div className="contain-inline-size">
@@ -710,8 +707,8 @@ export default function Tickets() {
                                         </div>
 
                                         {/* Table */}
-                                        <div className="max-h-[520px] overflow-auto">
-                                            <Table className="">
+                                        <div className="w-full max-h-[calc(100vh-360px)] overflow-auto">
+                                            <Table className="w-full min-w-[1050px]">
                                                 <TableHeader className="sticky top-0 z-20 backdrop-blur border-b-2">
                                                     <TableRow className="h-8 bg-slate-50/90  hover:bg-slate-50/90">
                                                     {columns.map(

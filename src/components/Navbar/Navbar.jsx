@@ -73,8 +73,10 @@ export default function Navbar({ module, isCollapsed, setIsCollapsed }) {
 
 	return (
 		// flex flex-col items-center px-4 md:px-6 lg:px-8 bg-white fixed top-0 right-0 left-0 z-10 h-18 border-b xl:left-60 2xl:left-72 2xl:h-20
-		<nav className={cn("flex flex-col items-center px-4 md:px-6 lg:px-8 bg-white fixed top-0 right-0 left-0 z-10 h-18 border-b xl:left-60 2xl:left-72 2xl:h-20", isCollapsed && "2xl:left-16 xl:left-16")}>
-			<div className="flex min-h-full w-full max-w-[1400px] flex-col">
+		<nav className={cn("flex flex-col items-center px-4 md:px-6 lg:px-8 bg-white fixed top-0 right-0 left-0 z-10 h-18 border-b xl:left-60 2xl:left-72 2xl:h-20 xl:px-10 2xl:px-14", isCollapsed && "2xl:left-16 xl:left-16")}>
+			{/* <div className="flex min-h-full w-full max-w-[1400px] flex-col"> */}
+			{/* NEW  */}
+			<div className="flex min-h-full w-full flex-col">
 				{/* Logo */}
 				
 				{/* Action Bar */}

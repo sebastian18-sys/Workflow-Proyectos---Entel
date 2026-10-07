@@ -99,7 +99,6 @@ export const UNIDADES_FUNCIONALES = {
     "jose.arroyo@entel.pe": "Proyectos Outdoor",
     "katerin.delacruz@entel.pe": "Proyectos Outdoor",
     
-    "katia.chumpitaz@entel.pe": "Proyectos Outdoor",
     "omar.escurra@entel.pe": "Proyectos Outdoor",
     "rafael.quintana@entel.pe": "Proyectos Outdoor",
     "ricardo.bazan@entel.pe": "Proyectos Outdoor",
@@ -117,6 +116,7 @@ export const UNIDADES_FUNCIONALES = {
     "mario.montejos@entel.pe": "Facilities e Infraestructura Critica",
     "juan.linares@entel.pe": "Facilities e Infraestructura Critica",
     "manuel.luna@entel.pe": "Facilities e Infraestructura Critica",
+    "katia.chumpitaz@entel.pe": "Facilities e Infraestructura Critica",
 
     // Transporte
     "yuliana.herrera@entel.pe": "Transporte e Indoor",
@@ -132,6 +132,11 @@ export const UNIDADES_FUNCIONALES = {
     "mcachay@olitel.pe": "Transporte e Indoor",
     "marco.alvaro.ent@viaexperis2.pe": "Transporte e Indoor",
     "medelein.tapia@entel.pe": "Transporte e Indoor",
+    "jyanez@olitel.pe": "Transporte e Indoor",
+    "adelacruz@olitel.pe": "Transporte e Indoor",
+    "wavalos@soporteexterno.pe": "Transporte e Indoor",
+    "robin.quinones.ent@viaexperis2.pe": "Transporte e Indoor",
+    "jsaravia@olitel.pe": "Transporte e Indoor",
 
     // Administracion de Sitios
     "karina.tasayco@entel.pe": "Administracion de Sitios",

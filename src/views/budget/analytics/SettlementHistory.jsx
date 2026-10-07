@@ -23,7 +23,7 @@ import { getOCbyProjects } from "@/services/capex/getOCbyProjects";
 import { getOCOptions } from "@/services/getOptionsFilters";
 import { ArrowLeft, Building2, FileText, FolderKanban, Inbox, Search, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router";
+import { Link, useOutletContext } from "react-router";
 
 const TABLE_ID = "settlement_history"
 
@@ -110,6 +110,8 @@ const toolbarConfig = {
 };
 
 export default function SettlementHistory() {
+
+    const { isCollapsed = false } = useOutletContext() || {}
 
     const { user } = useAuth()
     const { can } = useAuthz()
@@ -255,12 +257,18 @@ export default function SettlementHistory() {
     })
 
     return (
-        <div className="flex flex-col items-center px-4 md:px-6 mt-14 lg:px-8 py-5 md:pt-6 lg:pt-8 lg:pb-12">
-            <div className="flex min-h-full w-full max-w-[1400px] flex-col">
+        <div className="flex flex-col px-4 mt-14 py-5 md:pt-6 md:px-6 lg:pt-8 lg:px-8 lg:pb-12 xl:px-10 2xl:px-14">
+            <div className="flex min-h-full w-full min-w-0 flex-col">
 
                 {/* NAV TABS */}
-                <div className="flex flex-col items-center px-4 md:px-6 lg:px-8 bg-white fixed top-18 right-0 left-0 z-10 -mt-px h-14 border-b xl:left-60 2xl:top-20 2xl:left-72">
-                    <div className="flex min-h-full w-full max-w-[1400px] flex-col">
+                <div className={`fixed top-18 right-0 left-0 z-10 -mt-px flex h-14 flex-col items-center border-b bg-white px-4 md:px-6 lg:px-8 2xl:top-20 xl:px-10 2xl:px-14
+                    ${
+                        isCollapsed
+                            ? "xl:left-16 2xl:left-16"
+                            : "xl:left-60 2xl:left-72"
+                    }`}
+                >
+                    <div className="flex min-h-full w-full flex-col">
                         <div className="relative h-full border-t border-gray-100 dark:border-gray-300/50">
                             <div className="no-scrollbar mr-14 flex h-full gap-2 overflow-hidden lg:gap-4 pointer-coarse:-mx-4 pointer-coarse:overflow-scroll pointer-coarse:px-4 md:pointer-coarse:-mx-6 md:pointer-coarse:px-6 lg:pointer-coarse:-mx-8 lg:pointer-coarse:px-8">
                                 <div className="">
@@ -295,16 +303,12 @@ export default function SettlementHistory() {
                         </a>
                         <h2 className="text-2xl font-semibold text-[#2b7fff]">Historial</h2>
                     </div>
-                    {/* <FormNewTicket showAlert={showAlert} user={user} /> */}
-                    {/* <Button size="icon" onClick={startGenerate} className="cursor-pointer items-center justify-center rounded-lg align-middle font-medium transition-colors focus:outline-2 focus:outline-solid text-violet-900 hover:text-violet-900 bg-blue-500 hover:bg-blue-400 focus:outline-offset-2 outline-blue-300 dark:text-violet-100 dark:hover:text-violet-100 text-sm leading-6 px-3 py-2 gap-2 inline-flex w-10 2xl:w-auto">
-                        <Plus className="h-6 w-6 text-white" />
-                    </Button> */}
                 </div>
 
                 {/* Main */}
                 <div>
                     <div className="relative">
-                        <div className="rounded-2xl bg-white p-8 relative">
+                        <div className="relative rounded-2xl bg-white p-4 md:p-5 lg:p-6">
                             <div className="relative">
                                 <div className="relative min-h-44">
                                     <div className="contain-inline-size">
@@ -391,8 +395,8 @@ export default function SettlementHistory() {
                                         </div>
 
                                         {/* Table */}
-                                        <div className="max-h-[520px] overflow-auto">
-                                            <Table className="">
+                                        <div className="w-full max-h-[calc(100vh-360px)] overflow-auto">
+                                            <Table className="w-full min-w-[1050px]">
                                                 {/* <TableHeader className="sticky top-0 z-20 backdrop-blur border-b-2"> */}
                                                 <TableHeader>
                                                     <TableRow className="h-8 bg-slate-50/90  hover:bg-slate-50/90">

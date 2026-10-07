@@ -27,11 +27,12 @@ export default function Layout({ title, module, sidebar, children }) {
             </Helmet>
             <div className={cn("flex min-h-dvh flex-col pt-18 pb-[calc(env(safe-area-inset-bottom)+4rem)] xl:pb-0 xl:pl-60 2xl:pt-20 2xl:pl-72", isCollapsed && "2xl:pl-16 xl:pl-16")}>
                 <Sidebar sidebar={filteredSidebar} isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-                <div className="flex-1 bg-[#f3f4f6] flex flex-col overflow-hidden">
+                {/* <div className="flex-1 bg-[#f3f4f6] flex flex-col overflow-hidden"> */}
+                <div className="min-w-0 flex-1 bg-[#f3f4f6] flex flex-col overflow-x-hidden">
                     <Navbar module={module} isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
                     <wc-toast position="bottom-right" ></wc-toast>
                     <SidebarMobile sidebar={filteredSidebar} />
-                    <Outlet />
+                    <Outlet context={{ isCollapsed }} />
                 </div>
             </div>
         </>

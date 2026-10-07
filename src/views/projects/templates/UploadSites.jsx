@@ -61,140 +61,7 @@ const TEMP_SITES = [
         project_name: "RANCO TDD 2026",
         subproject_name: "RANCO TDD 2026 - Q2",
         torrera: "ATC"
-    },
-    // {
-    //     site: "010325624_SM_Nvo_tacabamba",
-    //     project_code: "M0854",
-    //     project_name: "RANCO TDD 2026",
-    //     subproject_name: "RANCO TDD 2026 - Q2",
-    //     torrera: "ATC"
-    // },
-    // {
-    //     site: "010325622_SM_Caserio_Palmas",
-    //     project_code: "M0854",
-    //     project_name: "RANCO TDD 2026",
-    //     subproject_name: "RANCO TDD 2026 - Q2",
-    //     torrera: "ATC"
-    // },
-    // {
-    //     site: "010291330_CP_Rosario_Huayllay",
-    //     project_code: "M0854",
-    //     project_name: "RANCO TDD 2026",
-    //     subproject_name: "RANCO TDD 2026 - Q2",
-    //     torrera: "ATC"
-    // },
-    // {
-    //     site: "010310001_LM_Santa_Anita",
-    //     project_code: "M0854",
-    //     project_name: "RANCO TDD 2026",
-    //     subproject_name: "RANCO TDD 2026 - Q2",
-    //     torrera: "TDP"
-    // },
-    // {
-    //     site: "010310002_LM_San_Borja",
-    //     project_code: "M0854",
-    //     project_name: "RANCO TDD 2026",
-    //     subproject_name: "RANCO TDD 2026 - Q2",
-    //     torrera: "ATC"
-    // },
-    // {
-    //     site: "010310003_LM_La_Molina",
-    //     project_code: "M0854",
-    //     project_name: "RANCO TDD 2026",
-    //     subproject_name: "RANCO TDD 2026 - Q2",
-    //     torrera: "SBA"
-    // },
-    // {
-    //     site: "010310004_LM_Miraflores",
-    //     project_code: "M0854",
-    //     project_name: "RANCO TDD 2026",
-    //     subproject_name: "RANCO TDD 2026 - Q2",
-    //     torrera: "ATC"
-    // },
-    // {
-    //     site: "010310005_LM_Surco",
-    //     project_code: "M0854",
-    //     project_name: "RANCO TDD 2026",
-    //     subproject_name: "RANCO TDD 2026 - Q2",
-    //     torrera: "ATC"
-    // },
-    // {
-    //     site: "010310006_LM_Barranco",
-    //     project_code: "M0854",
-    //     project_name: "RANCO TDD 2026",
-    //     subproject_name: "RANCO TDD 2026 - Q2",
-    //     torrera: "TDP"
-    // },
-    // {
-    //     site: "010310007_LM_Chorrillos",
-    //     project_code: "M0854",
-    //     project_name: "RANCO TDD 2026",
-    //     subproject_name: "RANCO TDD 2026 - Q2",
-    //     torrera: "ATC"
-    // },
-    // {
-    //     site: "010310008_LM_San_Isidro",
-    //     project_code: "M0854",
-    //     project_name: "RANCO TDD 2026",
-    //     subproject_name: "RANCO TDD 2026 - Q2",
-    //     torrera: "ATC"
-    // },
-    // {
-    //     site: "010310009_LM_Lince",
-    //     project_code: "M0854",
-    //     project_name: "RANCO TDD 2026",
-    //     subproject_name: "RANCO TDD 2026 - Q2",
-    //     torrera: "ATC"
-    // },
-    // {
-    //     site: "010310010_LM_Brena",
-    //     project_code: "M0854",
-    //     project_name: "RANCO TDD 2026",
-    //     subproject_name: "RANCO TDD 2026 - Q2",
-    //     torrera: "SBA"
-    // },
-    // {
-    //     site: "010310011_LM_Pueblo_Libre",
-    //     project_code: "M0854",
-    //     project_name: "RANCO TDD 2026",
-    //     subproject_name: "RANCO TDD 2026 - Q2",
-    //     torrera: "ATC"
-    // },
-    // {
-    //     site: "010310012_LM_Jesus_Maria",
-    //     project_code: "M0854",
-    //     project_name: "RANCO TDD 2026",
-    //     subproject_name: "RANCO TDD 2026 - Q2",
-    //     torrera: "ATC"
-    // },
-    // {
-    //     site: "010310013_LM_Magdalena",
-    //     project_code: "M0854",
-    //     project_name: "RANCO TDD 2026",
-    //     subproject_name: "RANCO TDD 2026 - Q2",
-    //     torrera: "TDP"
-    // },
-    // {
-    //     site: "010310014_LM_San_Miguel",
-    //     project_code: "M0854",
-    //     project_name: "RANCO TDD 2026",
-    //     subproject_name: "RANCO TDD 2026 - Q2",
-    //     torrera: "ATC"
-    // },
-    // {
-    //     site: "010310015_LM_Callao",
-    //     project_code: "M0854",
-    //     project_name: "RANCO TDD 2026",
-    //     subproject_name: "RANCO TDD 2026 - Q2",
-    //     torrera: "ATC"
-    // },
-    // {
-    //     site: "010310016_LM_Bellavista",
-    //     project_code: "M0854",
-    //     project_name: "RANCO TDD 2026",
-    //     subproject_name: "RANCO TDD 2026 - Q2",
-    //     torrera: "ATC"
-    // }
+    }
 ]
 
 export default function UploadSites() {
@@ -534,8 +401,8 @@ export default function UploadSites() {
     }
 
     return (
-        <div className="flex flex-col items-center px-4 md:px-6 lg:px-8 py-5 md:pt-6 lg:pt-8 lg:pb-12">
-            <div className="flex min-h-full w-full max-w-[1400px] flex-col">
+        <div className="flex flex-col px-4 py-5 md:pt-6 md:px-6 lg:pt-8 lg:px-8 lg:pb-12 xl:px-10 2xl:px-14">
+            <div className="flex min-h-full w-full min-w-0 flex-col">
 
                 {/* Breadcrumb */}
                 <div className="flex justify-between gap-4 mb-5 md:mb-6 lg:mb-8">
@@ -566,7 +433,7 @@ export default function UploadSites() {
                     <div className="relative">
                         {/* items-center justify-between flex */}
                         <div className="bg-white relative rounded-lg p-6 mb-6">
-                            <div className="mx-auto  max-w-7xl ">
+                            <div className="mx-auto  max-w-9xl ">
                                 <div className="flex justify-between items-center gap-3">
                                     <div>
                                         <div className="space-y-2">

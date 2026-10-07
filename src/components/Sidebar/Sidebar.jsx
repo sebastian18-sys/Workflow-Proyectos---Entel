@@ -319,12 +319,13 @@ export default function Sidebar({ sidebar: sidebar_nav, className, isCollapsed, 
 										<NavLink
 											key={child.id}
 											to={child.path}
+											end
 											className={({ isActive }) =>
 												cn(
-												"flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors",
-												isActive
-													? "bg-[#dbeafe] text-[#2b7fff]"
-													: "text-[#6a7282]/80 hover:bg-slate-50 hover:text-slate-700"
+													"flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors",
+													isActive
+														? "bg-[#dbeafe] font-medium text-[#2b7fff]"
+														: "text-[#6a7282]/80 hover:bg-slate-50 hover:text-slate-700"
 												)
 											}
 										>

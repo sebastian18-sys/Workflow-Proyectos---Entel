@@ -22,7 +22,8 @@ import {
 } from "lucide-react"
 
 import {
-    Link
+    Link,
+    useOutletContext
 } from "react-router-dom"
 
 import {
@@ -143,16 +144,8 @@ const AVAILABILITY_CONFIG = {
 
 export default function TrackingMonthly() {
 
-    const {
-        user
-    } = useAuth()
-
-
-    /*
-     * =========================================================
-     * TABLE TOOL
-     * =========================================================
-     */
+    const { isCollapsed = false } = useOutletContext() || {}
+    const { user } = useAuth()
 
     const {
         sortBy,
@@ -170,10 +163,8 @@ export default function TrackingMonthly() {
         visibleColumns
     } = useTableTool({
         columns,
-        defaultSortBy:
-            "forecast_date"
+        defaultSortBy: "forecast_date"
     })
-
 
     /*
      * =========================================================
@@ -181,19 +172,11 @@ export default function TrackingMonthly() {
      * =========================================================
      */
 
-    const {
-        filterOptions
-    } = useOptionsFilter({
+    const { filterOptions } = useOptionsFilter({
         request: getTrackingMonthlyOptions,
         debugName: "getTrackingMonthlyOptions"
     })
 
-
-    /*
-     * =========================================================
-     * PRINCIPAL FILTERS
-     * =========================================================
-     */
 
     const today = new Date()
 
@@ -391,18 +374,22 @@ export default function TrackingMonthly() {
         ).length
 
     return (
-        <div className="flex flex-col items-center px-4 md:px-6 mt-14 lg:px-8 py-5 md:pt-6 lg:pt-8 lg:pb-12">
+        <div className="flex flex-col px-4 mt-14 py-5 md:pt-6 md:px-6 lg:pt-8 lg:px-8 lg:pb-12 xl:px-10 2xl:px-14">
 
-            <div className="flex min-h-full w-full max-w-[1400px] flex-col">
-
+            <div className="flex min-h-full w-full min-w-0 flex-col">
 
                 {/* =================================================
                     NAV TABS
                 ================================================= */}
+                <div className={`fixed top-18 right-0 left-0 z-10 -mt-px flex h-14 flex-col items-center border-b bg-white px-4 md:px-6 lg:px-8 2xl:top-20 xl:px-10 2xl:px-14
+                    ${
+                        isCollapsed
+                            ? "xl:left-16 2xl:left-16"
+                            : "xl:left-60 2xl:left-72"
+                    }`}
+                >
 
-                <div className="flex flex-col items-center px-4 md:px-6 lg:px-8 bg-white fixed top-18 right-0 left-0 z-10 -mt-px h-14 border-b xl:left-60 2xl:top-20 2xl:left-72">
-
-                    <div className="flex min-h-full w-full max-w-[1400px] flex-col">
+                    <div className="flex min-h-full w-full flex-col">
 
                         <div className="relative h-full border-t border-gray-100 dark:border-gray-300/50">
 
@@ -510,7 +497,7 @@ export default function TrackingMonthly() {
                     MAIN CARD
                 ================================================= */}
                 <div className="relative">
-                    <div className="rounded-2xl bg-white p-8 relative">
+                    <div className="relative rounded-2xl bg-white p-4 md:p-5 lg:p-6">
                         <div className="relative min-h-44">
                             <div className="contain-inline-size">
                                 {/* =================================================
@@ -743,8 +730,8 @@ export default function TrackingMonthly() {
                                 {/* =================================================
                                     TABLE
                                 ================================================= */}
-                                <div className="max-h-[520px] overflow-auto">
-                                    <Table>
+                                <div className="w-full max-h-[calc(100vh-360px)] overflow-auto">
+                                    <Table className="w-full min-w-[1050px]">
                                         <TableHeader className="sticky top-0 z-20 backdrop-blur border-b-2">
                                             <TableRow className="h-8 bg-slate-50/90 hover:bg-slate-50/90">
                                                 {columns.map(

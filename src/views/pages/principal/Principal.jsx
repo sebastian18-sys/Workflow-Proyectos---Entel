@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "react-router";
 import ModuleCard from "@/components/ModuleCard/ModuleCard";
-import Navbar from "@/components/Navbar/Navbar";
 import { modules } from "@/constants/_modules";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";

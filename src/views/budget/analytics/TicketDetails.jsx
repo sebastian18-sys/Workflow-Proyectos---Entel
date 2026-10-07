@@ -162,14 +162,6 @@ const buildGroupedRqRows = (rows = []) => {
     )
 }
 
-function normalize(text = "") {
-    return String(text)
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toUpperCase()
-        .replace(/[^A-Z0-9]/g, "");
-}
-
 const Information = ({
     form,
     editing,
@@ -264,6 +256,19 @@ const Information = ({
                     </div>
                 </div>
 
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div className="space-y-2">
+                        <Label className="text-sm text-muted-foreground">Ticket Jira</Label>
+                        <Input
+                            className="focus-visible:border-blue-500 focus-visible:border-2 focus-visible:ring-0"
+                            placeholder="GAVR"
+                            value={form?.ticket_jira ?? ""}
+                            disabled
+                            // onChange={(e) => onChangeField("ticket_name", e.target.value)}
+                        />
+                    </div>
+                </div>
+
                 <h2 className="font-semibold text-blue-500">Formato RQ</h2>
 
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-1">
@@ -306,17 +311,13 @@ const Information = ({
                                 onFile={setFileSustentos} 
                             />
                         )}
-
                     </div>
                 </div>
-
             </section>
 
             <Separator />
-
             <section className="space-y-4">
                 <h2 className="font-semibold text-blue-500 mt-6">Comentarios</h2>
-
                 <div className="space-y-2">
                     {form?.comments?.length > 0 ? (
                         <div className="overflow-x-auto border-t">
@@ -345,9 +346,7 @@ const Information = ({
                         <div className="text-sm text-muted-foreground">No hay comentarios</div>
                     )}
                 </div>
-
             </section>
-
         </div>
     )
 }
@@ -365,8 +364,6 @@ const EditableTable = ({
             return match ? Number(match[0]) : Number.MAX_SAFE_INTEGER
         }
 
-        
-
         return [...rows].sort((a, b) => {
             const aNro = getNroValue(a.nro)
             const bNro = getNroValue(b.nro)
@@ -377,29 +374,6 @@ const EditableTable = ({
             return String(a.identificador ?? "").localeCompare(String(b.identificador ?? ""))
         })
     }, [rows])
-
-    // console.log("rows", rows)
-
-
-    // GET OC from rqProy by rq in rows
-    // const getOcFromRq = (rq) => {
-    //     let oc = crProy.find(r => r.rq === rq)?.nro_oc
-        
-    //     oc == 0 ? oc = "" : oc
-
-    //     return oc
-    // }
-
-    // // Add key oc in rows
-    
-    // rows.forEach(r => {
-    //     const oc = getOcFromRq(r.rq)
-    //     r.oc = oc
-    // })
-
-    // const rowsWithLineaOC = useMemo(() => {
-    //     return attachLineaOC(sortedRows, crProy);
-    // }, [sortedRows, crProy]);
 
     const updateCell = (id, field, value) => {
 
@@ -1309,8 +1283,8 @@ export default function TicketDetails() {
 
     return (
 
-        <div className="flex flex-col items-center px-4 md:px-6 lg:px-8 py-5 md:pt-6 lg:pt-8 lg:pb-12">
-            <div className="flex min-h-full w-full max-w-[1400px] flex-col">
+        <div className="flex flex-col px-4 py-5 md:pt-6 md:px-6 lg:pt-8 lg:px-8 lg:pb-12 xl:px-10 2xl:px-14">
+            <div className="flex min-h-full w-full min-w-0 flex-col">
                 {/* Breadcrumb */}
                 <div className="flex justify-between gap-4 mb-5 md:mb-6 lg:mb-8">
                     <div className="flex gap-4 items-center">

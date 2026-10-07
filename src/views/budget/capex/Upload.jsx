@@ -1,16 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-    Card,
-    CardContent
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader2, UploadCloud, FileDown, ChevronDown, ChevronUp } from "lucide-react";
 import { useUploadData } from "@/hooks/budget/capex/useUploadData";
-// import FileDropzone from "@/components/drag_drop/FileDropzone";
 
-// ======================================
-// Utilities: localStorage persistence per (doc,year)
-// ======================================
 const LS_PREFIX = "uploader_v1";
 const comboKey = (code, year) => `${String(code).toLowerCase()}:${year ?? ""}`
 const lsKey = (doc, year) => `${LS_PREFIX}:${doc}${year ? ":"+year : ""}`;
@@ -26,10 +19,6 @@ const PRELOADS = {
 };
 
 function getSeedInfo(code, year) {
-
-	console.log("code", code)
-	console.log("year", year)
-
 	const key = `${String(code).toLowerCase()}:${year ?? ""}`
 	return PRELOADS[key] ?? null;
 }
@@ -88,9 +77,6 @@ const RequiredCard = ({ title, code, years, currentYear, state, setState, templa
 	const key = comboKey(code, year);
 	const seedGuardRef = useRef({});
 	const file = state[key] ?? null;
-	// const [file, setFile] = useState(state[key] ?? null);
-
-	// Preload previous meta to show hint (persisted)
 	const prevMeta = readFileMeta(code, year);
 
 	useEffect(() => {
@@ -285,8 +271,6 @@ export default function Upload() {
 				console.log(error)
 			}
 
-			// Clear only the transient selection (keep localStorage meta)
-			// setFiles({});
 			alert("Documentos cargados correctamente");
 		} catch (e) {
 			console.error(e);
@@ -297,7 +281,7 @@ export default function Upload() {
 	};
 
     return (
-        <div className="bg-white m-8 rounded-2xl space-y-4 p-4 md:p-6">
+        <div className="flex flex-col px-4 py-5 md:pt-6 md:px-6 lg:pt-8 lg:px-8 lg:pb-12 xl:px-10 2xl:px-14">
 			<h2 className="mb-4 text-2xl font-semibold text-[#2b7fff]">Carga de datos</h2>
 			{/* 1) OBLIGATORIOS con años */}
 			<div className="mb-6">

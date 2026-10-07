@@ -354,8 +354,8 @@ export default function SiteSummary() {
     
 
     return (
-        <div className="flex flex-col items-center px-4 md:px-6 mt-14 lg:px-8 py-5 md:pt-6 lg:pt-8 lg:pb-12">
-            <div className="flex min-h-full w-full max-w-[1600px] flex-col">
+        <div className="flex flex-col px-4 py-5 md:pt-6 md:px-6 lg:pt-8 lg:px-8 lg:pb-12 xl:px-10 2xl:px-14">
+            <div className="flex min-h-full w-full min-w-0 flex-col">
 
                 {/* CABECERA */}
                 <div className="flex justify-between gap-4 mb-5 md:mb-6 lg:mb-8">
@@ -390,7 +390,7 @@ export default function SiteSummary() {
 
                 {/* CONTENIDO */}
                 <div className="relative">
-                    <div className="rounded-2xl bg-white p-6 relative">
+                    <div className="relative rounded-2xl bg-white p-4 md:p-5 lg:p-6">
                         <div className="relative min-h-44">
 
                             {/* TOOLBAR */}
@@ -467,8 +467,8 @@ export default function SiteSummary() {
                             </div>
 
                             {/* TABLA */}
-                            <div className="mt-5 overflow-x-auto rounded-xl border">
-                                <Table className="min-w-max">
+                            <div className="w-full max-h-[calc(100vh-360px)] overflow-auto">
+                                <Table className="w-full min-w-[1050px]">
                                     <TableHeader>
                                         <TableRow className="bg-slate-50">
                                             <TableHead className="sticky left-0 z-20 min-w-[180px] bg-slate-50">

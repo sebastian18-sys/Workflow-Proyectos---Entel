@@ -37,7 +37,11 @@ import {
   UploadIcon,
   TrainTrack,
   CheckCircle2,
-  Notebook
+  Notebook,
+  Search,
+  Settings2,
+  BriefcaseBusiness,
+  Inbox
 } from "lucide-react"
 import { PERMS } from "./perm"
 
@@ -270,274 +274,388 @@ export const _nav_budget = [
     }
 ]
 
+// export const _nav_projects = [
+//     {
+//         _tag: '',
+//         id: "dashboard",
+// 		label: "Dashboard",
+// 		path: "/projects/dashboard",
+// 		icon: LayoutDashboard,
+//         _children: []
+//     },
+//     // {
+//     //     _tag: 'ChevronDown',
+// 	// 	id: "proyectos",
+//     //     label: 'Proyectos',
+//     //     path: '#',
+//     //     icon: FolderKanban,
+//     //     _children: [
+//     //         {
+//     //             _tag: '',
+// 	// 			id: "proyectos-historial",
+//     //             label: 'Historial',
+//     //             path: '/projects/history',
+// 	// 			icon: PanelsTopLeft,
+//     //         },
+//     //         {
+//     //             _tag: '',
+//     //             id: "proyectos-me",
+// 	// 			label: "Mis Proyectos",
+// 	// 			path: "/projects/me",
+// 	// 			icon: FolderOpenDot,
+//     //         },
+//     //         {
+//     //             _tag: '',
+//     //             id: "proyectos-iniciativa",
+// 	// 			label: "Iniciativa",
+// 	// 			path: "/projects/initiative",
+// 	// 			icon: ChartBar,
+//     //         },
+//     //         {
+//     //             _tag: '',
+//     //             id: "proyectos-ejecucion",
+// 	// 			label: "Ejecución",
+// 	// 			path: "/projects/execution",
+// 	// 			icon: ChartNoAxesCombined,
+//     //         },
+//     //         {
+//     //             _tag: '',
+//     //             id: "proyectos-cierre",
+// 	// 			label: "Cierre",
+// 	// 			path: "/projects/closure",
+// 	// 			icon: FileChartColumn,
+//     //         }
+//     //     ],
+//     // },
+//     // {
+//     //     _tag: 'ChevronDown',
+// 	// 	id: "sitios",
+//     //     label: 'Sitios',
+//     //     path: '#',
+//     //     icon: MapPinned,
+//     //     _children: [
+//     //         {
+//     //             _tag: '',
+// 	// 			id: "sites-total",
+//     //             label: 'Total Sitios',
+//     //             path: '/projects/sites/total',
+// 	// 			icon: PanelsTopLeft,
+//     //         },
+//     //         {
+//     //             _tag: '',
+//     //             id: "sites-me",
+// 	// 			label: "Mis Sitios",
+// 	// 			path: "/projects/sites/me",
+// 	// 			icon: PanelsTopLeft,
+//     //         },
+//     //     ],
+//     // },
+    
+    
+//     ,
+//     // {
+//     //     _tag: '',
+//     //     id: "gantt",
+// 	// 	label: "Gantt",
+// 	// 	path: "/projects/gantt",
+// 	// 	icon: ChartGantt,
+//     //     _children: []
+//     // },
+//     // {
+//     //     _tag: '',
+//     //     id: "validaciones",
+// 	// 	label: "Validaciones",
+// 	// 	path: "/projects/validations",
+// 	// 	icon: CheckCheck,
+//     //     _children: []
+//     // },
+//     {
+//         _tag: 'ChevronDown',
+// 		id: "inbox",
+//         label: 'Mis Tareas',
+//         path: '',
+//         icon: LayoutTemplate,
+//         _children: [
+//             {
+//                 _tag: '',
+//                 id: "inbox",
+// 				label: "Mi bandeja",
+// 				path: "/projects/inbox",
+// 				icon: ChartGantt,
+//             },
+//             {
+//                 _tag: '',
+//                 id: "sites-massive",
+// 				label: "Completado Masivo",
+// 				path: "/projects/sites/massive",
+// 				icon: CheckCircle2,
+//             }
+//         ],
+//     },
+//     // {
+//     //     _tag: '',
+//     //     id: "inbox",
+// 	// 	label: "Mi bandeja",
+// 	// 	path: "/projects/inbox",
+// 	// 	icon: ChartGantt,
+//     //     _children: []
+//     // },
+//     // {
+//     //     _tag: '',
+//     //     id: "sites-massive",
+// 	// 	label: "Completado Masivo",
+// 	// 	path: "/projects/sites/massive",
+// 	// 	icon: CheckCircle2,
+//     //     _children: []
+//     // },
+
+//     {
+//         _tag: 'ChevronDown',
+// 		id: "tracking-all",
+//         label: 'Tracking',
+//         path: '',
+//         icon: TrainTrack,
+//         _children: [
+//             {
+//                 _tag: '',
+//                 id: "tracking-summary",
+// 				label: "Resumen",
+// 				path: "/projects/tracking/summary",
+// 				icon: Notebook,
+//             },
+//             {
+//                 _tag: '',
+//                 id: "tracking-site",
+// 				label: "Tracking",
+// 				path: "/projects/tracking",
+// 				icon: TrainTrack,
+//             },
+            
+//         ],
+//     },
+
+//     {
+//         _tag: 'ChevronDown',
+// 		id: "sites-all",
+//         label: 'Sitios',
+//         path: '',
+//         icon: MapPinned,
+//         _children: [
+//             {
+//                 _tag: '',
+//                 id: "identificadores",
+// 				label: "Identificadores",
+// 				path: "/projects/identifiers",
+// 				icon: LayoutList,
+//             },
+//             {
+//                 _tag: '',
+//                 id: "site-summary",
+// 				label: "Vista Resumen",
+// 				path: "/projects/sites/total",
+// 				icon: MapPinned,
+//             },
+            
+//         ],
+//     },
+
+//     // {
+//     //     _tag: '',
+//     //     id: "tracking",
+// 	// 	label: "Tracking",
+// 	// 	path: "/projects/tracking",
+// 	// 	icon: TrainTrack,
+//     //     _children: []
+//     // },
+//     // {
+//     //     _tag: '',
+//     //     id: "identificadores",
+// 	// 	label: "Identificadores",
+// 	// 	path: "/projects/identifiers",
+// 	// 	icon: LayoutList,
+//     //     _children: []
+//     // },
+//     // {
+//     //     _tag: '',
+//     //     id: "sites-total",
+// 	// 	label: "Sitios",
+// 	// 	path: "/projects/sites/total",
+// 	// 	icon: MapPinned,
+//     //     _children: []
+//     // },
+//     {
+//         _tag: '',
+//         id: "update-sites",
+// 		label: "Carga de Sitios",
+// 		path: "/projects/upload-sites",
+// 		icon: UploadIcon,
+//         _children: []
+//     },
+//     {
+//         _tag: 'ChevronDown',
+// 		id: "plantillas",
+//         label: 'Plantillas',
+//         path: '',
+//         icon: LayoutTemplate,
+//         _children: [
+//             // {
+//             //     _tag: '',
+// 			// 	id: "plantillas-formularios",
+//             //     label: 'Fomularios',
+//             //     path: '/projects/templates/forms',
+// 			// 	icon: FileStack,
+//             // },
+//             {
+//                 _tag: '',
+//                 id: "plantillas-workflows",
+// 				label: "Workflows",
+// 				path: "/projects/templates/workflows",
+// 				icon: Workflow,
+//             },
+//             {
+//                 _tag: '',
+//                 id: "plantillas-tareas",
+// 				label: "Tareas",
+// 				path: "/projects/templates/tasks",
+// 				icon: ClipboardList,
+//             }
+//         ],
+//     }
+//     // {
+//     //     _tag: 'ChevronDown',
+// 	// 	id: "adherencia",
+//     //     label: 'Adherencia',
+//     //     path: '#',
+//     //     icon: ShieldCheck,
+//     //     _children: [
+//     //         {
+//     //             _tag: '',
+// 	// 			id: "adherencia-resumen",
+//     //             label: 'Resumen',
+//     //             path: '/projects/adherence/summary',
+// 	// 			icon: PanelsTopLeft,
+//     //         },
+//     //         {
+//     //             _tag: '',
+//     //             id: "adherencia-cumplimiento",
+// 	// 			label: "Cumplimiento",
+// 	// 			path: "/projects/adherence/compliance",
+// 	// 			icon: SquareCheck,
+//     //         },
+//     //     ],
+//     // }
+// ]
+
 export const _nav_projects = [
+
     {
-        _tag: '',
+        _tag: "",
         id: "dashboard",
-		label: "Dashboard",
-		path: "/projects/dashboard",
-		icon: LayoutDashboard,
+        label: "Dashboard",
+        path: "/projects/dashboard",
+        icon: LayoutDashboard,
         _children: []
     },
-    // {
-    //     _tag: 'ChevronDown',
-	// 	id: "proyectos",
-    //     label: 'Proyectos',
-    //     path: '#',
-    //     icon: FolderKanban,
-    //     _children: [
-    //         {
-    //             _tag: '',
-	// 			id: "proyectos-historial",
-    //             label: 'Historial',
-    //             path: '/projects/history',
-	// 			icon: PanelsTopLeft,
-    //         },
-    //         {
-    //             _tag: '',
-    //             id: "proyectos-me",
-	// 			label: "Mis Proyectos",
-	// 			path: "/projects/me",
-	// 			icon: FolderOpenDot,
-    //         },
-    //         {
-    //             _tag: '',
-    //             id: "proyectos-iniciativa",
-	// 			label: "Iniciativa",
-	// 			path: "/projects/initiative",
-	// 			icon: ChartBar,
-    //         },
-    //         {
-    //             _tag: '',
-    //             id: "proyectos-ejecucion",
-	// 			label: "Ejecución",
-	// 			path: "/projects/execution",
-	// 			icon: ChartNoAxesCombined,
-    //         },
-    //         {
-    //             _tag: '',
-    //             id: "proyectos-cierre",
-	// 			label: "Cierre",
-	// 			path: "/projects/closure",
-	// 			icon: FileChartColumn,
-    //         }
-    //     ],
-    // },
-    // {
-    //     _tag: 'ChevronDown',
-	// 	id: "sitios",
-    //     label: 'Sitios',
-    //     path: '#',
-    //     icon: MapPinned,
-    //     _children: [
-    //         {
-    //             _tag: '',
-	// 			id: "sites-total",
-    //             label: 'Total Sitios',
-    //             path: '/projects/sites/total',
-	// 			icon: PanelsTopLeft,
-    //         },
-    //         {
-    //             _tag: '',
-    //             id: "sites-me",
-	// 			label: "Mis Sitios",
-	// 			path: "/projects/sites/me",
-	// 			icon: PanelsTopLeft,
-    //         },
-    //     ],
-    // },
-    
-    
-    ,
-    // {
-    //     _tag: '',
-    //     id: "gantt",
-	// 	label: "Gantt",
-	// 	path: "/projects/gantt",
-	// 	icon: ChartGantt,
-    //     _children: []
-    // },
-    // {
-    //     _tag: '',
-    //     id: "validaciones",
-	// 	label: "Validaciones",
-	// 	path: "/projects/validations",
-	// 	icon: CheckCheck,
-    //     _children: []
-    // },
+
     {
-        _tag: 'ChevronDown',
-		id: "inbox",
-        label: 'Mis Tareas',
-        path: '',
-        icon: LayoutTemplate,
+        _tag: "ChevronDown",
+        id: "work",
+        label: "Mi trabajo",
+        path: "",
+        icon: BriefcaseBusiness,
+
         _children: [
             {
-                _tag: '',
+                _tag: "",
                 id: "inbox",
-				label: "Mi bandeja",
-				path: "/projects/inbox",
-				icon: ChartGantt,
+                label: "Mi bandeja",
+                path: "/projects/inbox",
+                icon: Inbox
             },
             {
-                _tag: '',
+                _tag: "",
                 id: "sites-massive",
-				label: "Completado Masivo",
-				path: "/projects/sites/massive",
-				icon: CheckCircle2,
+                label: "Completado masivo",
+                path: "/projects/sites/massive",
+                icon: CheckCircle2
             }
-        ],
+        ]
     },
-    // {
-    //     _tag: '',
-    //     id: "inbox",
-	// 	label: "Mi bandeja",
-	// 	path: "/projects/inbox",
-	// 	icon: ChartGantt,
-    //     _children: []
-    // },
-    // {
-    //     _tag: '',
-    //     id: "sites-massive",
-	// 	label: "Completado Masivo",
-	// 	path: "/projects/sites/massive",
-	// 	icon: CheckCircle2,
-    //     _children: []
-    // },
-
     {
-        _tag: 'ChevronDown',
-		id: "tracking-all",
-        label: 'Tracking',
-        path: '',
-        icon: TrainTrack,
+        _tag: "ChevronDown",
+        id: "tracking",
+        label: "Seguimiento",
+        path: "",
+        icon: ChartNoAxesCombined,
         _children: [
             {
-                _tag: '',
+                _tag: "",
                 id: "tracking-summary",
-				label: "Resumen",
-				path: "/projects/tracking/summary",
-				icon: Notebook,
+                label: "Resumen de avance",
+                path: "/projects/tracking/summary",
+                icon: LayoutList
             },
             {
-                _tag: '',
+                _tag: "",
                 id: "tracking-site",
-				label: "Tracking",
-				path: "/projects/tracking",
-				icon: TrainTrack,
-            },
-            
-        ],
+                label: "Tracking de fechas",
+                path: "/projects/tracking",
+                icon: ChartGantt
+            }
+        ]
     },
-
     {
-        _tag: 'ChevronDown',
-		id: "sites-all",
-        label: 'Sitios',
-        path: '',
+        _tag: "ChevronDown",
+        id: "sites",
+        label: "Sitios",
+        path: "",
         icon: MapPinned,
         _children: [
             {
                 _tag: '',
                 id: "identificadores",
-				label: "Identificadores",
-				path: "/projects/identifiers",
-				icon: LayoutList,
+                label: "Identificadores",
+	            path: "/projects/identifiers",
+	            icon: LayoutList,
             },
             {
-                _tag: '',
-                id: "site-summary",
-				label: "Vista Resumen",
-				path: "/projects/sites/total",
-				icon: MapPinned,
-            },
-            
-        ],
-    },
-
-    // {
-    //     _tag: '',
-    //     id: "tracking",
-	// 	label: "Tracking",
-	// 	path: "/projects/tracking",
-	// 	icon: TrainTrack,
-    //     _children: []
-    // },
-    // {
-    //     _tag: '',
-    //     id: "identificadores",
-	// 	label: "Identificadores",
-	// 	path: "/projects/identifiers",
-	// 	icon: LayoutList,
-    //     _children: []
-    // },
-    // {
-    //     _tag: '',
-    //     id: "sites-total",
-	// 	label: "Sitios",
-	// 	path: "/projects/sites/total",
-	// 	icon: MapPinned,
-    //     _children: []
-    // },
-    {
-        _tag: '',
-        id: "update-sites",
-		label: "Carga de Sitios",
-		path: "/projects/upload-sites",
-		icon: UploadIcon,
-        _children: []
-    },
-    {
-        _tag: 'ChevronDown',
-		id: "plantillas",
-        label: 'Plantillas',
-        path: '',
-        icon: LayoutTemplate,
-        _children: [
-            // {
-            //     _tag: '',
-			// 	id: "plantillas-formularios",
-            //     label: 'Fomularios',
-            //     path: '/projects/templates/forms',
-			// 	icon: FileStack,
-            // },
-            {
-                _tag: '',
-                id: "plantillas-workflows",
-				label: "Workflows",
-				path: "/projects/templates/workflows",
-				icon: Workflow,
+                _tag: "",
+                id: "sites-directory",
+                label: "Directorio de sitios",
+                path: "/projects/sites/total",
+                icon: Search
             },
             {
-                _tag: '',
-                id: "plantillas-tareas",
-				label: "Tareas",
-				path: "/projects/templates/tasks",
-				icon: ClipboardList,
+                _tag: "",
+                id: "upload-sites",
+                label: "Carga y lanzamiento",
+                path: "/projects/upload-sites",
+                icon: UploadIcon
             }
-        ],
+        ]
+    },
+    {
+        _tag: "ChevronDown",
+        id: "configuration",
+        label: "Configuración",
+        path: "",
+        icon: Settings2,
+
+        _children: [
+            {
+                _tag: "",
+                id: "templates-workflows",
+                label: "Workflows",
+                path: "/projects/templates/workflows",
+                icon: Workflow
+            },
+            {
+                _tag: "",
+                id: "templates-tasks",
+                label: "Tareas",
+                path: "/projects/templates/tasks",
+                icon: ClipboardList
+            }
+        ]
     }
-    // {
-    //     _tag: 'ChevronDown',
-	// 	id: "adherencia",
-    //     label: 'Adherencia',
-    //     path: '#',
-    //     icon: ShieldCheck,
-    //     _children: [
-    //         {
-    //             _tag: '',
-	// 			id: "adherencia-resumen",
-    //             label: 'Resumen',
-    //             path: '/projects/adherence/summary',
-	// 			icon: PanelsTopLeft,
-    //         },
-    //         {
-    //             _tag: '',
-    //             id: "adherencia-cumplimiento",
-	// 			label: "Cumplimiento",
-	// 			path: "/projects/adherence/compliance",
-	// 			icon: SquareCheck,
-    //         },
-    //     ],
-    // }
 ]

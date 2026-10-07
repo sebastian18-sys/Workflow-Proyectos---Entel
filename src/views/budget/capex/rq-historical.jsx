@@ -156,7 +156,6 @@ export default function RQHistorical() {
         ];
     }, [filterOptions]);
 
-    // const [activeAdvancedFilters, setActiveAdvancedFilters] = useState([]);
     const {
         activeAdvancedFilters,
         setActiveAdvancedFilters,
@@ -214,16 +213,10 @@ export default function RQHistorical() {
         error
     } = useRQ(queryParams);
 
-    // const removeAdvancedFilter = (filterId) => {
-    //     setActiveAdvancedFilters((prev) =>
-    //         prev.filter((filter) => filter.id !== filterId)
-    //     );
-    // };
-
     return (
         
-        <div className="flex flex-col items-center px-4 md:px-6 lg:px-8 py-5 md:pt-6 lg:pt-8 lg:pb-12">
-            <div className="flex min-h-full w-full max-w-[1400px] flex-col">
+        <div className="flex flex-col px-4 py-5 md:pt-6 md:px-6 lg:pt-8 lg:px-8 lg:pb-12 xl:px-10 2xl:px-14">
+            <div className="flex min-h-full w-full min-w-0 flex-col">
             
                 {/* Breadcrumb */}
                 <div className="flex gap-4 mb-5 md:mb-6 lg:mb-8">
@@ -240,10 +233,8 @@ export default function RQHistorical() {
                 {/* MAIN */}
                 <div>
                     <div className="relative">
-                        <div className="rounded-2xl bg-white p-8 relative">
-
+                        <div className="relative rounded-2xl bg-white p-4 md:p-5 lg:p-6">
                             <div className="relative">
-
                                 <div className="relative min-h-44">
 
                                     <div className="contain-inline-size">
@@ -348,12 +339,11 @@ export default function RQHistorical() {
                                                     ))}
                                                 </div>
                                             )}
-
                                         </div>
 
                                         {/* Table */}
-                                        <div className="max-h-[520px] overflow-auto">
-                                            <Table>
+                                        <div className="w-full max-h-[calc(100vh-360px)] overflow-auto">
+                                            <Table className="w-full min-w-[1050px]">
                                                 <TableHeader className="sticky top-0 z-20 backdrop-blur border-b-2">
                                                     <TableRow className="h-8 bg-slate-50/90  hover:bg-slate-50/90">
                                                     {columns.map(

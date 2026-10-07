@@ -127,12 +127,6 @@ const STATUS_META = {
     },
 };
 
-const STATUS_TICKET = {
-    "Hito 1": ["bg-yellow-100 text-yellow-700 hover:bg-yellow-200", "bg-yellow-500 outline-yellow-500/20"],
-    "Hito 2": ["bg-emerald-100 text-emerald-700 hover:bg-emerald-200", "bg-emerald-500 outline-emerald-500/20"],
-    "Cancelado": ["bg-gray-100 text-gray-700 hover:bg-gray-200", "bg-gray-500 outline-gray-500/20"],
-}
-
 const STATUS_PAYMENT_SITE = {
     "Abierto": ["bg-yellow-100 text-yellow-700 hover:bg-yellow-200", "bg-yellow-500 outline-yellow-500/20"],
     "Cerrado": ["bg-slate-100 text-slate-700 hover:bg-slate-200", "bg-slate-500 outline-slate-500/20"],
@@ -163,25 +157,6 @@ const commentConfigByTransition = {
         placeholder: "Comentario...",
         submitLabel: "Confirmar",
     },
-    // "Validación Jefatura__Pago Enviado a MG": {
-    //     title: "Cambiar estado a Pago Enviado a MG",
-    //     description: "Deja un comentario para registrar el ticket.",
-    //     placeholder: "Comentario...",
-    //     submitLabel: "Enviar",
-    // },
-    // "Pendiente CT__Observado": {
-    //     title: "Cambiar estado a Observado",
-    //     description: "Indica el motivo de la observación.",
-    //     placeholder: "Ej: Información incompleta / archivo inválido / falta aprobación ...",
-    //     submitLabel: "Observar",
-    // },
-    // "Observado__Pendiente CT": {
-    //     title: "Cambiar estado a Pendiente CT",
-    //     description: "Comentario",
-    //     placeholder: "Ej: Se han revisado las observaciones",
-    //     submitLabel: "Enviar",
-    // },
-
     "Cancelado" :{
         title: "Cambiar estado a Cancelado",
         description: "Deja un comentario para registrar la cancelación.",
@@ -193,13 +168,7 @@ const commentConfigByTransition = {
         description: "Deja un comentario para cerrar el ticket",
         placeholder: "Comentario...",
         submitLabel: "Confirmar",
-    },
-    // "Pago Generado__Validación Jefatura": {
-    //     title: "Cambiar estado a Hito 2",
-    //     description: "Deja un comentario para actualizar el ticket.",
-    //     placeholder: "Comentario...",
-    //     submitLabel: "Enviar",
-    // }
+    }
 }
 
 const PAYMENT_STEPS_HITO1 = [
@@ -259,46 +228,6 @@ function StatusBadge({ status = "default", active = false }) {
     );
 }
 
-
-// function MiniStep({ title, status = "pendiente", active, last = false }) {
-
-//     // const meta = STATUS_META[status];
-//     const meta = STATUS_META[status] ?? {
-//         ...STATUS_META.default,
-//         label: status || STATUS_META.default.label,
-//     };
-
-//     const Icon = status === "cerrado" ? CheckCircle2 : active ? AlertCircle : CircleDashed;
-
-//     return (
-//         <div className="flex items-center">
-//             <div className="flex items-center gap-3">
-//                 <div
-//                     className={`flex h-10 w-10 items-center justify-center rounded-full border ${
-//                         status === "cerrado"
-//                         ? "border-emerald-200 bg-emerald-50 text-emerald-600"
-//                         : active
-//                             ? "border-blue-200 bg-blue-50 text-[#2b7fff]"
-//                             : "border-slate-200 bg-slate-50 text-slate-400"
-//                     }`}
-//                 >
-//                     <Icon className="h-4 w-4" />
-//                 </div>
-//                 <div>
-//                     <div className="text-sm font-semibold text-slate-800">{title}</div>
-//                     <div className="text-xs text-slate-500">{meta?.label}</div>
-//                 </div>
-//             </div>
-//             {!last ? <div className="mx-4 h-[2px] w-16 rounded-full bg-slate-200" /> : null}
-//         </div>
-//     );
-// }
-
-// function getPaymentStepIndex(status) {
-//     const idx = PAYMENT_STEPS.indexOf(status);
-//     return idx >= 0 ? idx : -1;
-// }
-
 function getPaymentStepIndex(status, steps) {
     const idx = steps.indexOf(status);
     return idx >= 0 ? idx : -1;
@@ -309,7 +238,6 @@ function PaymentStatusTimeline({ status, currentStage }) {
     const steps = currentStage === "hito2" ? PAYMENT_STEPS_HITO2 : PAYMENT_STEPS_HITO1;
     const currentIndex = getPaymentStepIndex(status, steps);
     const isClose = status === "Cerrado";
-    // console.log("status", status)
 
     return (
         <div className="space-y-3 rounded-2xl border border-blue-100 bg-blue-50/60 p-4">
@@ -322,8 +250,6 @@ function PaymentStatusTimeline({ status, currentStage }) {
             <div className="flex flex-wrap items-center gap-y-3">
                 {steps.map((step, index) => {
                     const done = index < currentIndex;
-                    // const close = step === "Pago Generado";
-                    // console.log("index", index, "currentIndex", currentIndex)
 
                     const current = index === currentIndex;
                     return (
@@ -362,13 +288,6 @@ function PaymentStatusTimeline({ status, currentStage }) {
 
 
 function TimelineItem({ title, data, currentStage, active, done, startStateChange }) {
-
-    // title="Hito 2 · Validación final"
-    // data={form?.hito2}
-    // currentStage={"hito2"}
-    // active={form?.currentStage === "hito2"}
-    // done={form?.hito2?.status === "cerrado"}
-    // startStateChange={startStateChange}
 
     return (
         <div className="relative pl-8">
@@ -1459,8 +1378,8 @@ export default function PaymentsDetails() {
     }
 
     return (
-        <div className="flex flex-col items-center px-4 md:px-6 lg:px-8 py-5 md:pt-6 lg:pt-8 lg:pb-12">
-            <div className="flex min-h-full w-full max-w-[1400px] flex-col">
+        <div className="flex flex-col px-4 py-5 md:pt-6 md:px-6 lg:pt-8 lg:px-8 lg:pb-12 xl:px-10 2xl:px-14">
+            <div className="flex min-h-full w-full min-w-0 flex-col">
                 {/* Breadcrumb */}
                 <div className="flex justify-between gap-4 mb-5 md:mb-6 lg:mb-8">
                     <div className="flex gap-4 items-center">
