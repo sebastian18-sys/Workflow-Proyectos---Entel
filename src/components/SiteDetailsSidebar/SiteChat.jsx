@@ -1,4 +1,9 @@
-import { useEffect, useMemo, useState } from "react"
+import {
+    useEffect,
+    useMemo,
+    useRef,
+    useState
+} from "react"
 
 import {
     MessageSquare,
@@ -28,6 +33,7 @@ export default function SiteChat({
     const [selectedTaskCode, setSelectedTaskCode] = useState("")
     // const [selectedTaskName, setSelectedTaskName] = useState(null)
     const effectiveTaskCode = taskCode || selectedTaskCode
+    const chatListRef = useRef(null)
 
     const {
         comments,
@@ -46,8 +52,48 @@ export default function SiteChat({
         }
     })
 
+    const orderedComments = useMemo(() => {
+
+        return [...(comments || [])].sort((a, b) => {
+
+            const dateA = new Date(a.createdAt).getTime()
+            const dateB = new Date(b.createdAt).getTime()
+
+            if (dateA !== dateB) {
+                return dateA - dateB
+            }
+
+            return String(a._id || "")
+                .localeCompare(String(b._id || ""))
+        })
+
+    }, [comments])
+
+    const scrollToBottom = (behavior = "auto") => {
+        const container = chatListRef.current
+        if (!container) return
+        container.scrollTo({
+            top: container.scrollHeight,
+            behavior
+        })
+    }
+
+    useEffect(() => {
+        if (loading) return
+        requestAnimationFrame(() => {
+            scrollToBottom("auto")
+        })
+
+    }, [
+        loading,
+        effectiveTaskCode,
+        orderedComments.length
+    ])
+
     const handleSend = async() => {
+
         const text = message.trim()
+
         if (!text || !currentUser?.id) return
 
         await sendComment({
@@ -64,23 +110,11 @@ export default function SiteChat({
 
         setMessage("")
         setSelectedMentions([])
-    }
 
-    // const isPMOrAdmin =
-    // [
-    //     currentUser?.role,
-    //     currentUser?.profile,
-    //     currentUser?.description
-    // ]
-    //     .filter(Boolean)
-    //     .some(
-    //         value =>
-    //             ["PM", "ADMIN"].includes(
-    //                 String(value)
-    //                     .trim()
-    //                     .toUpperCase()
-    //             )
-    //     )
+        requestAnimationFrame(() => {
+            scrollToBottom("smooth")
+        })
+    }
 
     const isPMOrAdmin = can(PERMS.PROJECTS.PROJECT_WORKFLOW_PM_ADMIN_FUNCTIONS)
 
@@ -258,16 +292,15 @@ export default function SiteChat({
                 </div>
             )}
 
-
             <div
+                ref={chatListRef}
                 className={[
-                    "min-h-0 flex-1 space-y-4 overflow-y-auto",
+                    "min-h-0 flex-1 space-y-3 overflow-y-auto scroll-smooth",
                     compact
                         ? "px-4 py-4"
-                        : "px-5 py-5"
+                        : "px-6 py-5"
                 ].join(" ")}
             >
-
                 {loading ? (
                     <div className="flex items-center justify-center py-16 text-sm text-slate-400">
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -277,7 +310,7 @@ export default function SiteChat({
                     <div className="py-16 text-center text-sm text-red-500">
                         No se pudieron cargar los comentarios.
                     </div>
-                ) : comments.length === 0 ? (
+                ) : orderedComments.length === 0 ? (
                     <div
                         className={[
                             "flex items-center justify-center text-center",
@@ -299,8 +332,7 @@ export default function SiteChat({
                         </div>
                     </div>
                 ) : (
-
-                    comments.map(
+                    orderedComments.map(
                         (comment, index) => {
 
                             const mine =
@@ -396,6 +428,56 @@ export default function SiteChat({
  * =========================================================
  */
 
+// function CommentItem({
+//     comment,
+//     mine,
+//     compact
+// }) {
+
+//     return (
+//         <div
+//             className={`flex gap-3 ${
+//                 mine
+//                     ? "flex-row-reverse"
+//                     : ""
+//             }`}
+//         >
+//             <div className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-slate-100 text-slate-500">
+//                 <UserRound className="h-4 w-4" />
+//             </div>
+//             <div
+//                 className={[
+//                     compact
+//                         ? "max-w-[88%]"
+//                         : "max-w-[68%]",
+//                     "rounded-xl px-4 py-3",
+//                     mine
+//                         ? "bg-blue-50"
+//                         : "border border-slate-100 bg-white"
+//                 ].join(" ")}
+//             >
+//                 <div className="text-xs font-medium text-slate-600">
+//                     {
+//                         comment.user_name ||
+//                         comment.user_id ||
+//                         "Usuario"
+//                     }
+//                 </div>
+//                 <div className="mt-1 whitespace-pre-wrap text-sm text-slate-700">
+//                     {comment.message || ""}
+//                 </div>
+//                 <div className="mt-2 text-[10px] text-slate-400">
+//                     {
+//                         formatDateTime(
+//                             comment.createdAt
+//                         )
+//                     }
+//                 </div>
+//             </div>
+//         </div>
+//     )
+// }
+
 function CommentItem({
     comment,
     mine,
@@ -404,44 +486,92 @@ function CommentItem({
 
     return (
         <div
-            className={`flex gap-3 ${
+            className={[
+                "flex items-end gap-2.5",
                 mine
-                    ? "flex-row-reverse"
-                    : ""
-            }`}
+                    ? "justify-end"
+                    : "justify-start"
+            ].join(" ")}
         >
-            <div className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-slate-100 text-slate-500">
-                <UserRound className="h-4 w-4" />
-            </div>
+
+            {/* AVATAR OTRO USUARIO */}
+            {!mine && (
+                <div className="
+                    flex h-8 w-8 flex-none
+                    items-center justify-center
+                    rounded-full
+                    bg-slate-100
+                    text-slate-500
+                ">
+                    <UserRound className="h-4 w-4" />
+                </div>
+            )}
+
+            {/* MENSAJE */}
             <div
                 className={[
+                    "min-w-[140px] rounded-2xl px-4 py-3",
                     compact
-                        ? "max-w-[88%]"
-                        : "max-w-[68%]",
-                    "rounded-xl px-4 py-3",
+                        ? "max-w-[82%]"
+                        : "max-w-[70%]",
                     mine
-                        ? "bg-blue-50"
-                        : "border border-slate-100 bg-white"
+                        ? "rounded-br-md bg-blue-50"
+                        : "rounded-bl-md border border-slate-100 bg-white"
                 ].join(" ")}
             >
-                <div className="text-xs font-medium text-slate-600">
-                    {
-                        comment.user_name ||
+
+                <div
+                    className={[
+                        "text-xs font-semibold",
+                        mine
+                            ? "text-blue-700"
+                            : "text-slate-600"
+                    ].join(" ")}
+                >
+                    {comment.user_name ||
                         comment.user_id ||
-                        "Usuario"
-                    }
+                        "Usuario"}
                 </div>
-                <div className="mt-1 whitespace-pre-wrap text-sm text-slate-700">
+
+                <div className="
+                    mt-1
+                    whitespace-pre-wrap
+                    break-words
+                    text-sm
+                    leading-5
+                    text-slate-700
+                ">
                     {comment.message || ""}
                 </div>
-                <div className="mt-2 text-[10px] text-slate-400">
-                    {
-                        formatDateTime(
-                            comment.createdAt
-                        )
-                    }
+
+                <div
+                    className={[
+                        "mt-2 text-[10px] text-slate-400",
+                        mine
+                            ? "text-right"
+                            : "text-left"
+                    ].join(" ")}
+                >
+                    {formatDateTime(
+                        comment.createdAt
+                    )}
                 </div>
+
             </div>
+
+            {/* AVATAR PROPIO */}
+            {mine && (
+                <div className="
+                    flex h-8 w-8 flex-none
+                    items-center justify-center
+                    rounded-full
+                    bg-blue-50
+                    text-blue-500
+                ">
+                    <UserRound className="h-4 w-4" />
+                </div>
+            )}
+
         </div>
     )
 }

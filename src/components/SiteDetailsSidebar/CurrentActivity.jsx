@@ -13,7 +13,8 @@ import {
     Loader2,
     Save,
     Users,
-    X
+    X,
+    ChevronDown
 } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
@@ -479,14 +480,20 @@ function SubtaskCard({
      * =========================================================
      * PERMISOS VISUALES
      * =========================================================
-     *
-     * Backend sigue siendo la autoridad.
-     * Front simplemente evita presentar edición
+     * Front evita presentar edición
      * a quien no tiene la subtarea asignada.
      */
     const currentUserId = String(currentUser?.id || "")
     const assignedToCurrentUser = (subtask.assigned_user_ids || []).map(String).includes(currentUserId)
-    const editable = ["ACTIVE", "OBSERVED"].includes(subtask.status) && assignedToCurrentUser
+    
+    const editable = ["ACTIVE", "OBSERVED"]
+        .includes(subtask.status) && assignedToCurrentUser
+
+    const showStateSelector = ["ACTIVE", "OBSERVED", "COMPLETED"]
+        .includes(subtask.status) && assignedToCurrentUser
+
+    const stateEditable = ["ACTIVE", "OBSERVED"]
+        .includes(subtask.status) && assignedToCurrentUser
 
     /*
      * =========================================================
@@ -556,12 +563,14 @@ function SubtaskCard({
                     <SubtaskStatusBadge
                         status={subtask.status}
                     />
-                    {editable && (
+                    {showStateSelector && (
                         <Select
                             value={pendingState || subtask.state || ""}
-                            disabled={saving}
+                            disabled={saving || !stateEditable}
                             onValueChange={value => {
+                                if (!stateEditable) return
                                 if (value === subtask.state) return
+
                                 setPendingState(value)
                             }}
                         >
@@ -737,37 +746,6 @@ function SubtaskCard({
                         </div>
                     </div>
                 )}
-
-                {/* =================================================
-                    STATE SELECT
-                ================================================= */}
-                {/* {editable && (
-                    <div className="max-w-[420px]">
-                        <label className="mb-2 block text-xs font-medium text-slate-500">
-                            Cambiar estado
-                        </label>
-                        <Select
-                            value=""
-                            disabled={saving}
-                            onValueChange={value => setPendingState(value)}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="Seleccionar estado" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {(subtask.available_states || [])
-                                    .map(state => (
-                                        <SelectItem
-                                            key={state.state_key}
-                                            value={state.state_key}
-                                        >
-                                            {state.label}
-                                        </SelectItem>
-                                    ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
-                )} */}
             </div>
 
             {/* =================================================
@@ -788,6 +766,122 @@ function SubtaskCard({
                 }}
             />
         </div>
+    )
+}
+
+
+function MultiSelectField({
+    options = [],
+    value = [],
+    editable,
+    onChange
+}) {
+    const [open, setOpen] = useState(false)
+
+    const selectedValues = Array.isArray(value)
+        ? value.map(String)
+        : []
+
+    const toggleOption = option => {
+        if (!editable) return
+
+        const optionValue = String(option)
+
+        if (selectedValues.includes(optionValue)) {
+            onChange(
+                selectedValues.filter(
+                    item => item !== optionValue
+                )
+            )
+        } else {
+            onChange([
+                ...selectedValues,
+                optionValue
+            ])
+        }
+    }
+
+    return (
+        <Popover
+            open={open}
+            onOpenChange={setOpen}
+        >
+            <PopoverTrigger asChild>
+                <Button
+                    type="button"
+                    variant="outline"
+                    disabled={!editable}
+                    className="
+                        min-h-10
+                        w-full
+                        justify-between
+                        px-3
+                        font-normal
+                    "
+                >
+                    <div className="flex min-w-0 flex-1 flex-wrap gap-1.5">
+                        {selectedValues.length === 0 ? (
+                            <span className="text-slate-400">
+                                Seleccionar
+                            </span>
+                        ) : (
+                            selectedValues.map(item => (
+                                <span
+                                    key={item}
+                                    className="
+                                        rounded-md
+                                        bg-blue-50
+                                        px-2
+                                        py-0.5
+                                        text-xs
+                                        text-blue-700
+                                    "
+                                >
+                                    {item}
+                                </span>
+                            ))
+                        )}
+                    </div>
+                    <ChevronDown className="ml-2 h-4 w-4 shrink-0 text-slate-400" />
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent
+                className="w-[var(--radix-popover-trigger-width)] p-0"
+                align="start"
+            >
+                <Command>
+                    <CommandInput
+                        placeholder="Buscar opción..."
+                    />
+                    <CommandList className="max-h-[280px]">
+                        <CommandEmpty>
+                            No se encontraron opciones.
+                        </CommandEmpty>
+                        <CommandGroup>
+                            {options.map(option => {
+                                const optionValue = String(option)
+                                const checked = selectedValues.includes(optionValue)
+                                return (
+                                    <CommandItem
+                                        key={optionValue}
+                                        value={optionValue}
+                                        onSelect={() => toggleOption(optionValue)}
+                                    >
+                                        <Checkbox
+                                            checked={checked}
+                                            className="mr-3"
+                                        />
+                                        <span className="text-sm">
+                                            {optionValue}
+                                        </span>
+                                    </CommandItem>
+                                )
+                            })}
+                        </CommandGroup>
+                    </CommandList>
+                </Command>
+            </PopoverContent>
+        </Popover>
     )
 }
 
@@ -937,49 +1031,13 @@ function SubtaskField({
      * =========================================================
      */
     if (type === "MULTISELECT") {
-
-        const selectedValues = Array.isArray(value)
-            ? value.map(String)
-            : []
-
         return (
-            <select
-                multiple
-                value={selectedValues}
-                disabled={!editable}
-                className="
-                    min-h-[105px]
-                    w-full
-                    rounded-md
-                    border
-                    border-input
-                    bg-background
-                    px-3
-                    py-2
-                    text-sm
-                    outline-none
-                    disabled:cursor-not-allowed
-                    disabled:opacity-50
-                "
-                onChange={event => {
-                    const values =
-                        Array.from(event.target.selectedOptions).map(
-                            option => option.value
-                        )
-                    onChange(values)
-                }}
-            >
-                {(field.options || [])
-                    .map(option => (
-                        <option
-                            key={String(option)}
-                            value={String(option)}
-                        >
-                            {String(option)}
-                        </option>
-                    ))
-                }
-            </select>
+            <MultiSelectField
+                options={field.options || []}
+                value={value}
+                editable={editable}
+                onChange={onChange}
+            />
         )
     }
 
@@ -1553,12 +1611,6 @@ export default function CurrentActivity({
     can
 }) {
 
-    // console.log("activeTasks", activeTasks)
-    /*
-     * =========================================================
-     * INSTANCE ACTIONS
-     * =========================================================
-     */
     const {
         saving,
         changeSubtaskState,
@@ -1571,12 +1623,6 @@ export default function CurrentActivity({
 
     const { groupUsers } = useResponsibleUsers()
 
-    /*
-     * =========================================================
-     * STATE
-     * =========================================================
-     */
-
     const [selectedTaskCode, setSelectedTaskCode] = useState("")
     const [tab, setTab] = useState("subtasks")
     const [selectedSubtaskKey, setSelectedSubtaskKey] = useState("")
@@ -1587,9 +1633,41 @@ export default function CurrentActivity({
     const [responsibleSearchOpen, setResponsibleSearchOpen] = useState(false)
 
     const [chatOpen, setChatOpen] = useState(false)
-
-
     const currentUserId = String(currentUser?.id || "")
+
+    const getSubtaskStorageKey = taskCode => {
+        if (!instance?._id || !taskCode) return null
+
+        return `wf:selected-subtask:${instance._id}:${taskCode}`
+    }
+
+    const persistSelectedSubtask = (taskCode, subtaskKey) => {
+        const key = getSubtaskStorageKey(taskCode)
+
+        if (!key || !subtaskKey) return
+
+        sessionStorage.setItem(
+            key,
+            String(subtaskKey)
+        )
+    }
+
+    const getPersistedSubtask = taskCode => {
+        const key = getSubtaskStorageKey(taskCode)
+
+        if (!key) return ""
+
+        return sessionStorage.getItem(key) || ""
+    }
+
+    const handleSelectSubtask = subtaskKey => {
+        setSelectedSubtaskKey(subtaskKey)
+
+        persistSelectedSubtask(
+            selectedTaskCode,
+            subtaskKey
+        )
+    }
 
     const getPreferredTaskCode = () => {
         if (!tasks.length) {
@@ -1792,55 +1870,104 @@ export default function CurrentActivity({
         const subtasks = selectedTask?.subtasks || []
 
         if (!subtasks.length) {
-            setSelectedSubtaskKey("")
             return
         }
 
         /*
-        * Mantener la selección actual
-        * si sigue existiendo.
+        * 1. Mantener la selección que ya tenemos
+        * si todavía existe dentro de la TASK.
         */
-        const stillExists =
-            subtasks.some(
-                subtask => subtask.subtask_key === selectedSubtaskKey
-            )
-
-        if (stillExists) {
-            return
-        }
-
-        /*
-        * Prioridad:
-        *
-        * ACTIVE
-        * OBSERVED
-        * WAITING
-        *
-        * Si ninguna está activa,
-        * usar la primera.
-        */
-        const assignedCurrent = subtasks.find(subtask =>
-            ["ACTIVE", "OBSERVED", "WAITING"].includes(subtask.status) &&
-            (subtask.assigned_user_ids || [])
-                .map(String)
-                .includes(currentUserId)
+        const stillExists = subtasks.some(
+            subtask =>
+                subtask.subtask_key === selectedSubtaskKey
         )
 
-        const current = assignedCurrent ||
-            subtasks.find(subtask =>
-                ["ACTIVE", "OBSERVED", "WAITING"].includes(subtask.status)
+        if (selectedSubtaskKey && stillExists) {
+
+            persistSelectedSubtask(
+                selectedTask.task_code,
+                selectedSubtaskKey
             )
 
+            return
+        }
 
-        setSelectedSubtaskKey(
+        /*
+        * 2. Buscar la última subtarea seleccionada
+        * para esta INSTANCE + TASK.
+        */
+        const persistedSubtaskKey =
+            getPersistedSubtask(
+                selectedTask.task_code
+            )
+
+        const persistedStillExists =
+            persistedSubtaskKey &&
+            subtasks.some(
+                subtask =>
+                    subtask.subtask_key ===
+                    persistedSubtaskKey
+            )
+
+        if (persistedStillExists) {
+            setSelectedSubtaskKey(
+                persistedSubtaskKey
+            )
+
+            return
+        }
+
+        /*
+        * 3. Primera carga:
+        * buscar una subtarea activa asignada
+        * al usuario.
+        */
+        const assignedCurrent =
+            subtasks.find(subtask =>
+                ["ACTIVE", "OBSERVED", "WAITING"]
+                    .includes(subtask.status) &&
+                (subtask.assigned_user_ids || [])
+                    .map(String)
+                    .includes(currentUserId)
+            )
+
+        /*
+        * 4. Si no existe asignada al usuario,
+        * buscar cualquier subtarea activa.
+        */
+        const current =
+            assignedCurrent ||
+            subtasks.find(subtask =>
+                ["ACTIVE", "OBSERVED", "WAITING"]
+                    .includes(subtask.status)
+            )
+
+        /*
+        * 5. Último fallback:
+        * primera subtarea.
+        */
+        const nextSubtaskKey =
             current?.subtask_key ||
             subtasks[0]?.subtask_key ||
             ""
+
+        if (!nextSubtaskKey) {
+            return
+        }
+
+        setSelectedSubtaskKey(
+            nextSubtaskKey
+        )
+
+        persistSelectedSubtask(
+            selectedTask.task_code,
+            nextSubtaskKey
         )
 
     }, [
         selectedTask,
-        selectedSubtaskKey
+        selectedSubtaskKey,
+        currentUserId
     ])
 
     /*
@@ -1961,7 +2088,7 @@ export default function CurrentActivity({
                         <SubtaskTimeline
                             subtasks={selectedTask?.subtasks || []}
                             selectedSubtaskKey={selectedSubtaskKey}
-                            onSelect={setSelectedSubtaskKey}
+                            onSelect={handleSelectSubtask}
                         />
                     </div>
                 </div>

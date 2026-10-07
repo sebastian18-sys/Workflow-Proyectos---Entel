@@ -85,11 +85,10 @@ import MoreOptions from "@/components/Tables/MoreOptions"
 import { getTrackingStandbyOptions } from "@/services/getOptionsFilters"
 import { useOptionsFilter } from "@/hooks/useOptionsFilter"
 import { useTrackingStandby } from "@/hooks/projects/wf/useTrackingStandby"
+import { useResponsibleUsers } from "@/hooks/admin/useResponsibleUsers"
 
 
-const TABLE_ID =
-    "workflow-tracking-standby"
-
+const TABLE_ID = "workflow-tracking-standby"
 
 const columns = [
     {
@@ -105,11 +104,6 @@ const columns = [
     {
         id: "macro_project",
         label: "Proyecto",
-        visible: true
-    },
-    {
-        id: "workflow",
-        label: "Workflow",
         visible: true
     },
     {
@@ -150,72 +144,7 @@ const columns = [
 ]
 
 
-function TrackingNav() {
-
-    const items = [
-        {
-            label: "Tracking",
-            to: "/projects/tracking"
-        },
-        {
-            label: "Flujo",
-            to: "/projects/tracking/flow"
-        },
-        {
-            label: "Plan Mensual",
-            to: "/projects/tracking/monthly"
-        },
-        {
-            label: "Stand By",
-            to: "/projects/tracking/standby"
-        }
-    ]
-
-
-    return (
-        <div className="mb-6 border-b border-slate-200">
-
-            <div className="flex gap-7">
-
-                {items.map(item => {
-
-                    const active =
-                        item.to ===
-                        "/projects/tracking/standby"
-
-                    return (
-                        <Link
-                            key={item.to}
-                            to={item.to}
-                            className={[
-                                "relative pb-3 text-sm font-medium transition-colors",
-                                active
-                                    ? "text-blue-600"
-                                    : "text-slate-500 hover:text-slate-700"
-                            ].join(" ")}
-                        >
-
-                            {item.label}
-
-                            {active && (
-                                <span className="absolute bottom-0 left-0 h-0.5 w-full rounded-full bg-blue-500" />
-                            )}
-
-                        </Link>
-                    )
-                })}
-
-            </div>
-
-        </div>
-    )
-}
-
-
-function StandbyBadge({
-    state
-}) {
-
+function StandbyBadge({ state }) {
     return (
         <Badge
             variant="outline"
@@ -229,27 +158,17 @@ function StandbyBadge({
 }
 
 
-function formatDateTime(
-    value
-) {
+function formatDateTime(value) {
 
     if (!value) {
         return "-"
     }
 
+    const date = new Date(value)
 
-    const date =
-        new Date(value)
-
-
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
+    if (Number.isNaN(date.getTime())) {
         return value
     }
-
 
     return new Intl.DateTimeFormat(
         "es-PE",
@@ -264,27 +183,17 @@ function formatDateTime(
 }
 
 
-function formatDate(
-    value
-) {
+function formatDate(value) {
 
     if (!value) {
         return "-"
     }
 
+    const date = new Date(value)
 
-    const date =
-        new Date(value)
-
-
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
+    if (Number.isNaN(date.getTime())) {
         return value
     }
-
 
     return new Intl.DateTimeFormat(
         "es-PE",
@@ -297,35 +206,20 @@ function formatDate(
 }
 
 
-function getStandbyDays(
-    value
-) {
+function getStandbyDays(value) {
 
     if (!value) {
         return null
     }
 
+    const start = new Date(value)
+    const now = new Date()
 
-    const start =
-        new Date(value)
-
-    const now =
-        new Date()
-
-
-    if (
-        Number.isNaN(
-            start.getTime()
-        )
-    ) {
+    if (Number.isNaN(start.getTime())) {
         return null
     }
 
-
-    const diff =
-        now.getTime() -
-        start.getTime()
-
+    const diff = now.getTime() - start.getTime()
 
     return Math.max(
         0,
@@ -342,6 +236,8 @@ export default function TrackingStandby() {
     const navigate = useNavigate()
 
     const { user } = useAuth()
+
+    const { groupUsers } = useResponsibleUsers()
 
     const {
         sortBy,
@@ -546,6 +442,37 @@ export default function TrackingStandby() {
         }
 
 
+    const usersById = useMemo(() => {
+        return new Map(
+            groupUsers?.users?.map(user => [
+                String(
+                    user.id ||
+                    user.user_id ||
+                    user._id
+                ),
+                user
+            ])
+        )
+
+    }, [groupUsers?.users])
+
+    const getUserLabel = userId => {
+        if (!userId) return "-"
+        const user = usersById.get(String(userId))
+        if (!user) {
+            return String(userId)
+        }
+
+        return (
+            user.name ||
+            `${user.first_name || ""} ${user.last_name || ""}`.trim() ||
+            user.email ||
+            user.username ||
+            String(userId)
+        )
+    }
+    
+
     /*
      * =========================================================
      * RENDER
@@ -554,14 +481,11 @@ export default function TrackingStandby() {
 
     return (
         <div className="flex flex-col items-center px-4 md:px-6 mt-14 lg:px-8 py-5 md:pt-6 lg:pt-8 lg:pb-12">
-
             <div className="flex min-h-full w-full max-w-[1400px] flex-col">
-
 
                 {/* =================================================
                     NAV
                 ================================================= */}
-
                 {/* NAV TABS */}
                 <div className="flex flex-col items-center px-4 md:px-6 lg:px-8 bg-white fixed top-18 right-0 left-0 z-10 -mt-px h-14 border-b xl:left-60 2xl:top-20 2xl:left-72">
                     <div className="flex min-h-full w-full max-w-[1400px] flex-col">
@@ -600,7 +524,6 @@ export default function TrackingStandby() {
                     </div>
                 </div>
 
-
                 {/* =================================================
                     BREADCRUMB
                 ================================================= */}
@@ -614,15 +537,9 @@ export default function TrackingStandby() {
                             <ArrowLeft className="h-5 w-5" />
                         </Link>
                         <div>
-
                             <h2 className="text-2xl font-semibold text-[#2b7fff]">
                                 Stand By
                             </h2>
-
-                            <p className="mt-1 text-sm text-muted-foreground">
-                                Seguimiento de Sitios con subtareas detenidas
-                            </p>
-
                         </div>
                     </div>
                 </div>
@@ -630,91 +547,57 @@ export default function TrackingStandby() {
                 {/* =================================================
                     CONTENT CARD
                 ================================================= */}
-
                 <div className="relative mb-6 rounded-lg bg-white p-6">
-
                     <div className="mb-6">
-
                         <div className="flex items-center gap-2">
-
                             <CirclePause className="h-5 w-5 text-amber-500" />
-
                             <h3 className="font-semibold text-[#31577e]">
                                 Sitios en Stand By
                             </h3>
-
                         </div>
-
                         <p className="mt-1 text-xs text-slate-400">
                             Se muestran las Subtareas que actualmente tienen una condición semántica de Stand By.
                         </p>
-
                     </div>
-
 
                     {/* =================================================
                         TOOLBAR
                     ================================================= */}
-
                     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-
                         <div className="flex flex-wrap items-center gap-3">
-
                             <FilterAdvanced
-                                availableFilters={
-                                    availableFilters
-                                }
-                                activeFilters={
-                                    activeAdvancedFilters
-                                }
+                                availableFilters={availableFilters}
+                                activeFilters={activeAdvancedFilters}
                                 onChange={
                                     value => {
-
-                                        setActiveAdvancedFilters(
-                                            value
-                                        )
-
+                                        setActiveAdvancedFilters(value)
                                         setCurrentPage(1)
                                     }
                                 }
                             />
 
-
                             <div className="relative min-w-[250px] flex-1 lg:max-w-[380px]">
-
                                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-
                                 <Input
-                                    value={
-                                        filters.search
-                                    }
+                                    value={filters.search}
                                     onChange={
                                         event => {
-
                                             setFilters(
                                                 previous => ({
                                                     ...previous,
-                                                    search:
-                                                        event.target.value
+                                                    search: event.target.value
                                                 })
                                             )
-
-                                            setCurrentPage(
-                                                1
-                                            )
+                                            setCurrentPage(1)
                                         }
                                     }
                                     placeholder="Buscar site, workflow, tarea..."
                                     className="pl-9"
                                 />
-
                             </div>
-
                         </div>
 
-
                         <div className="flex items-center justify-end gap-3">
-
                             <div className="text-sm text-slate-400">
                                 <span className="font-semibold text-slate-700">
                                     {totalResults}
@@ -726,133 +609,75 @@ export default function TrackingStandby() {
                                     : "s"
                                 }
                             </div>
-
-
                             <Button
                                 variant="outline"
                                 size="icon"
                                 title="Actualizar"
-                                onClick={
-                                    reload
-                                }
+                                onClick={reload}
                             >
                                 <RefreshCw className="h-4 w-4" />
                             </Button>
-
-
                             <MoreOptions
-                                itemsPerPage={
-                                    itemsPerPage
-                                }
-                                setItemsPerPage={
-                                    setItemsPerPage
-                                }
-                                sortBy={
-                                    sortBy
-                                }
-                                setSortBy={
-                                    setSortBy
-                                }
-                                sortDirection={
-                                    sortDirection
-                                }
-                                setSortDirection={
-                                    setSortDirection
-                                }
+                                itemsPerPage={itemsPerPage}
+                                setItemsPerPage={setItemsPerPage}
+                                sortBy={sortBy}
+                                setSortBy={setSortBy}
+                                sortDirection={sortDirection}
+                                setSortDirection={setSortDirection}
                             />
-
                         </div>
 
-
                         {/* ACTIVE FILTERS */}
-
                         {activeAdvancedFilters.length > 0 && (
-
                             <div className="col-span-1 flex flex-wrap items-center gap-2 lg:col-span-2">
-
                                 <div className="mr-2 cursor-default border-r pr-4 text-sm leading-6 text-slate-400">
                                     Filtros activos
                                 </div>
-
-
-                                {activeAdvancedFilters.map(
-                                    filter => (
-
-                                        <div
-                                            key={
-                                                filter.id
-                                            }
-                                            className="relative"
-                                        >
-
-                                            <div className="flex cursor-pointer items-center gap-1.5 rounded-full border border-violet-200 bg-violet-50 py-1 pl-3.5 pr-8 text-sm leading-6 text-violet-600">
-
-                                                {filter.label}:
-
-                                                <strong className="font-medium">
-                                                    {filter.value}
-                                                </strong>
-
-
-                                                <button
-                                                    type="button"
-                                                    onClick={() => {
-
-                                                        removeAdvancedFilter(
-                                                            filter.id
-                                                        )
-
-                                                        setCurrentPage(
-                                                            1
-                                                        )
-                                                    }}
-                                                    className="absolute right-px rounded-full p-1.5 opacity-75 transition-all hover:opacity-100 focus:bg-violet-200"
-                                                    aria-label={`Quitar filtro ${filter.label}`}
-                                                >
-                                                    <X className="h-4 w-4" />
-                                                </button>
-
-                                            </div>
-
+                                {activeAdvancedFilters.map(filter => (
+                                    <div
+                                        key={filter.id}
+                                        className="relative"
+                                    >
+                                        <div className="flex cursor-pointer items-center gap-1.5 rounded-full border border-violet-200 bg-violet-50 py-1 pl-3.5 pr-8 text-sm leading-6 text-violet-600">
+                                            {filter.label}:
+                                            <strong className="font-medium">
+                                                {filter.value}
+                                            </strong>
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    removeAdvancedFilter(filter.id)
+                                                    setCurrentPage(1)
+                                                }}
+                                                className="absolute right-px rounded-full p-1.5 opacity-75 transition-all hover:opacity-100 focus:bg-violet-200"
+                                                aria-label={`Quitar filtro ${filter.label}`}
+                                            >
+                                                <X className="h-4 w-4" />
+                                            </button>
                                         </div>
-
-                                    )
-                                )}
-
+                                    </div>
+                                ))}
                             </div>
-
                         )}
-
                     </div>
-
 
                     {/* =================================================
                         ERROR
                     ================================================= */}
-
                     {error && (
-
                         <div className="mt-5 rounded-lg border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-600">
                             No se pudo cargar el Tracking de Stand By.
                         </div>
-
                     )}
-
 
                     {/* =================================================
                         TABLE
                     ================================================= */}
-
                     <div className="mt-6 overflow-hidden rounded-xl border border-slate-200">
-
                         <div className="max-h-[650px] overflow-auto">
-
                             <Table>
-
                                 <TableHeader className="sticky top-0 z-10 bg-slate-50">
-
                                     <TableRow>
-
                                         {visibleColumns.identificador && (
                                             <TableHead>
                                                 Identificador
@@ -865,15 +690,9 @@ export default function TrackingStandby() {
                                             </TableHead>
                                         )}
 
-                                        {visibleColumns.codigo_proyecto && (
+                                        {visibleColumns.macro_project && (
                                             <TableHead>
                                                 Proyecto
-                                            </TableHead>
-                                        )}
-
-                                        {visibleColumns.workflow && (
-                                            <TableHead>
-                                                Workflow
                                             </TableHead>
                                         )}
 
@@ -916,92 +735,54 @@ export default function TrackingStandby() {
                                         {visibleColumns.actions && (
                                             <TableHead className="w-[60px]" />
                                         )}
-
                                     </TableRow>
-
                                 </TableHeader>
-
-
                                 <TableBody>
-
                                     {loading && (
-
                                         <>
-                                            {Array.from({
-                                                length: 5
-                                            }).map(
+                                            {Array.from({length: 5}).map(
                                                 (_, index) => (
-
                                                     <TableRow
-                                                        key={
-                                                            index
-                                                        }
+                                                        key={index}
                                                     >
-
                                                         {columns
                                                             .filter(
-                                                                column =>
-                                                                    visibleColumns[
-                                                                        column.id
-                                                                    ]
+                                                                column => visibleColumns[column.id]
                                                             )
-                                                            .map(
-                                                                column => (
-
-                                                                    <TableCell
-                                                                        key={
-                                                                            column.id
-                                                                        }
-                                                                    >
-                                                                        <Skeleton className="h-5 w-full" />
-                                                                    </TableCell>
-
-                                                                )
-                                                            )
+                                                            .map(column => (
+                                                                <TableCell
+                                                                    key={column.id}
+                                                                >
+                                                                    <Skeleton className="h-5 w-full" />
+                                                                </TableCell>
+                                                            ))
                                                         }
-
                                                     </TableRow>
-
                                                 )
                                             )}
                                         </>
 
                                     )}
 
-
-                                    {!loading &&
-                                        !items.length && (
-
+                                    {!loading && !items.length && (
                                         <TableRow>
-
                                             <TableCell
                                                 colSpan={
                                                     columns.filter(
-                                                        column =>
-                                                            visibleColumns[
-                                                                column.id
-                                                            ]
+                                                        column => visibleColumns[column.id]
                                                     ).length
                                                 }
                                                 className="h-36 text-center text-sm text-slate-400"
                                             >
                                                 No existen sitios en Stand By con los filtros seleccionados.
                                             </TableCell>
-
                                         </TableRow>
-
                                     )}
-
 
                                     {!loading &&
                                         items.map(
                                             item => {
-
-                                                const standbyDays =
-                                                    getStandbyDays(
-                                                        item.standby_since
-                                                    )
-
+                                                const standbyDays = getStandbyDays(item.standby_since)
 
                                                 return (
 
@@ -1015,11 +796,8 @@ export default function TrackingStandby() {
                                                     >
 
                                                         {/* IDENTIFICADOR */}
-
                                                         {visibleColumns.identificador && (
-
                                                             <TableCell>
-
                                                                 <button
                                                                     type="button"
                                                                     onClick={() =>
@@ -1031,14 +809,10 @@ export default function TrackingStandby() {
                                                                 >
                                                                     {item.identificador}
                                                                 </button>
-
                                                             </TableCell>
-
                                                         )}
 
-
                                                         {/* SITIO */}
-
                                                         {visibleColumns.sitio && (
                                                             <TableCell>
                                                                 <div className="max-w-[220px] font-medium text-slate-700">
@@ -1047,9 +821,7 @@ export default function TrackingStandby() {
                                                             </TableCell>
                                                         )}
 
-
                                                         {/* PROYECTO */}
-
                                                         {visibleColumns.macro_project && (
                                                             <TableCell>
                                                                 <div className="font-medium text-slate-600">
@@ -1058,133 +830,60 @@ export default function TrackingStandby() {
                                                             </TableCell>
                                                         )}
 
-
-                                                        {/* WORKFLOW */}
-                                                        {visibleColumns.workflow && (
-                                                            <TableCell>
-                                                                <div className="font-medium text-slate-600">
-                                                                    {item.workflow_code || "-"}
-                                                                </div>
-
-                                                                {item.workflow_version && (
-                                                                    <div className="mt-1 text-[11px] text-slate-400">
-                                                                        v{item.workflow_version}
-                                                                    </div>
-                                                                )}
-
-                                                            </TableCell>
-
-                                                        )}
-
-
                                                         {/* TASK */}
-
                                                         {visibleColumns.task && (
-
                                                             <TableCell>
-
                                                                 <div className="font-medium text-slate-700">
                                                                     {item.task_name || "-"}
                                                                 </div>
-
-                                                                <div className="mt-1 text-[11px] text-slate-400">
-                                                                    {item.task_code || "-"}
-                                                                </div>
-
                                                             </TableCell>
-
                                                         )}
 
-
                                                         {/* SUBTASK */}
-
                                                         {visibleColumns.subtask && (
-
                                                             <TableCell>
-
                                                                 <div className="max-w-[190px] font-medium text-slate-700">
                                                                     {item.subtask_name || "-"}
                                                                 </div>
-
                                                             </TableCell>
 
                                                         )}
 
-
                                                         {/* STATE */}
-
                                                         {visibleColumns.state && (
-
                                                             <TableCell>
-
                                                                 <StandbyBadge
                                                                     state={
                                                                         item.state ||
                                                                         item.standby_state_key
                                                                     }
                                                                 />
-
                                                             </TableCell>
-
                                                         )}
-
 
                                                         {/* RESPONSABLE */}
-
                                                         {visibleColumns.responsible && (
-
                                                             <TableCell>
-
-                                                                {(item.assigned_user_ids || []).length
-                                                                    ? (
-                                                                        <div className="flex flex-wrap gap-1">
-
-                                                                            {item.assigned_user_ids.map(
-                                                                                userId => (
-
-                                                                                    <Badge
-                                                                                        key={
-                                                                                            userId
-                                                                                        }
-                                                                                        variant="outline"
-                                                                                        className="border-slate-200 bg-white font-normal text-slate-500"
-                                                                                    >
-                                                                                        {userId}
-                                                                                    </Badge>
-
-                                                                                )
-                                                                            )}
-
-                                                                        </div>
-                                                                    )
-                                                                    : "-"
-                                                                }
-
+                                                                <div className="font-medium text-slate-700">
+                                                                    {getUserLabel(
+                                                                        item.standby_by_user_id
+                                                                    )}
+                                                                </div>
                                                             </TableCell>
-
                                                         )}
 
-
                                                         {/* STANDBY SINCE */}
-
                                                         {visibleColumns.standby_since && (
-
                                                             <TableCell>
-
                                                                 <div className="flex items-center gap-2">
-
                                                                     <CalendarClock className="h-4 w-4 text-amber-500" />
-
                                                                     <div>
-
                                                                         <div className="font-medium text-slate-600">
                                                                             {formatDateTime(
                                                                                 item.standby_since
                                                                             )}
                                                                         </div>
-
                                                                         {standbyDays !== null && (
-
                                                                             <div className="mt-1 text-[11px] text-amber-600">
                                                                                 {standbyDays} día
                                                                                 {standbyDays === 1
@@ -1192,66 +891,34 @@ export default function TrackingStandby() {
                                                                                     : "s"
                                                                                 }
                                                                             </div>
-
                                                                         )}
-
                                                                     </div>
-
                                                                 </div>
-
                                                             </TableCell>
-
                                                         )}
-
 
                                                         {/* FORECAST */}
-
                                                         {visibleColumns.forecast && (
-
                                                             <TableCell>
-
                                                                 <div className="font-medium text-slate-600">
-                                                                    {formatDate(
-                                                                        item.forecast
-                                                                            ?.current_date
-                                                                    )}
+                                                                    {formatDate(item.forecast?.responsible_date)}
                                                                 </div>
-
-                                                                <div className="mt-1 text-[11px] text-slate-400">
-                                                                    SLA:{" "}
-                                                                    {formatDate(
-                                                                        item.forecast
-                                                                            ?.sla_date
-                                                                    )}
-                                                                </div>
-
                                                             </TableCell>
-
                                                         )}
 
-
                                                         {/* ACTION */}
-
                                                         {visibleColumns.actions && (
-
                                                             <TableCell>
-
                                                                 <DropdownMenu>
-
                                                                     <DropdownMenuTrigger asChild>
-
                                                                         <Button
                                                                             variant="ghost"
                                                                             size="icon"
                                                                         >
                                                                             <MoreVertical className="h-4 w-4" />
                                                                         </Button>
-
                                                                     </DropdownMenuTrigger>
-
-
                                                                     <DropdownMenuContent align="end">
-
                                                                         <DropdownMenuItem
                                                                             onClick={() =>
                                                                                 openSite(
@@ -1260,75 +927,42 @@ export default function TrackingStandby() {
                                                                             }
                                                                         >
                                                                             <Eye className="mr-2 h-4 w-4" />
-
                                                                             Ver sitio
                                                                         </DropdownMenuItem>
-
                                                                     </DropdownMenuContent>
-
                                                                 </DropdownMenu>
-
                                                             </TableCell>
-
                                                         )}
-
                                                     </TableRow>
-
                                                 )
                                             }
                                         )
                                     }
-
                                 </TableBody>
-
                             </Table>
-
                         </div>
-
                     </div>
-
 
                     {/* =================================================
                         PAGINATION
                     ================================================= */}
-
                     <div className="mt-5">
-
                         <Pagination
-                            currentPage={
-                                currentPage
-                            }
-                            totalPages={
-                                totalPages
-                            }
-                            itemsPerPage={
-                                itemsPerPage
-                            }
-                            setCurrentPage={
-                                setCurrentPage
-                            }
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            itemsPerPage={itemsPerPage}
+                            setCurrentPage={setCurrentPage}
                             setItemsPerPage={
                                 value => {
-                                    setItemsPerPage(
-                                        value
-                                    )
-
-                                    setCurrentPage(
-                                        1
-                                    )
+                                    setItemsPerPage(value)
+                                    setCurrentPage(1)
                                 }
                             }
-                            totalResults={
-                                totalResults
-                            }
+                            totalResults={totalResults}
                         />
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
     )
 }

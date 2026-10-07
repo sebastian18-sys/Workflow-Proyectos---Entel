@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth"
 import { useDebounce } from "@/hooks/useDebounce"
 import {
     ArrowLeft,
+    CalendarClock,
     Check,
     ChevronDown,
     Eye,
@@ -174,6 +175,89 @@ function stateFilterKey(taskCode, subtaskKey) {
 
 function fieldFilterKey(taskCode, subtaskKey, fieldKey) {
     return `FIELD::${taskCode}::${subtaskKey}::${fieldKey}`
+}
+
+function getResponsibleForecastColumnKeys(configuration = []) {
+    const keys = new Set()
+    for (const task of configuration) {
+        for (const subtask of task.subtasks || []) {
+            for (const field of subtask.fields || []) {
+                if (field.system_binding !== "TASK_RESPONSIBLE_FORECAST") {
+                    continue
+                }
+
+                keys.add(
+                    fieldCellKey(
+                        task.task_code,
+                        subtask.subtask_key,
+                        field.field_key
+                    )
+                )
+            }
+        }
+    }
+
+    return keys
+}
+
+function filterColumnsToResponsibleForecast(
+    columns = [],
+    forecastKeys = new Set()
+) {
+
+    /*
+     * Columnas fijas que siempre queremos conservar.
+     */
+    const fixedKeys = new Set([
+        "__actions",
+        "identificador",
+        "site",
+        "macro_project"
+    ])
+
+    return columns
+        .map(column => {
+
+            if (!column.children) {
+                return fixedKeys.has(column.key)
+                    ? column
+                    : null
+            }
+
+            const taskChildren = (column.children || []).map(subtaskGroup => {
+                
+                const children = (subtaskGroup.children || [])
+                    .filter(child =>
+                        forecastKeys.has(
+                            child.key
+                        )
+                    )
+
+                if (!children.length) {
+                    return null
+                }
+
+                return {
+                    ...subtaskGroup,
+                    children
+                }
+            })
+            .filter(Boolean)
+
+            /*
+             * Si la TASK no tiene ningún FCST,
+             * tampoco la mostramos.
+             */
+            if (!taskChildren.length) {
+                return null
+            }
+
+            return {
+                ...column,
+                children: taskChildren
+            }
+        })
+        .filter(Boolean)
 }
 
 
@@ -1783,11 +1867,11 @@ export default function CompleteMassive() {
     const [chatRow, setChatRow] = useState(null)
     const [chatTasks, setChatTasks] = useState([])
     const [chatTaskCode, setChatTaskCode] = useState("")
-    const [chatActivity, setChatActivity] = useState(null)
     
 
     // filters
     const [columnFilters, setColumnFilters] = useState({})
+    const [fcstOnly, setFcstOnly] = useState(false)
 
     const [workflowCode, setWorkflowCode] = useState("")
     const [taskCodes, setTaskCodes] = useState([])
@@ -1993,9 +2077,32 @@ export default function CompleteMassive() {
         [configuration, columnFilters, taskCodes, subtaskKeys]
     )
 
-    // const { columns, metaByKey} = useMemo(() =>
-    //     buildColumns(configuration)
-    //     , [configuration])
+    const responsibleForecastColumnKeys = useMemo(
+        () =>
+            getResponsibleForecastColumnKeys(
+                configuration
+            ),
+        [configuration]
+    )
+
+    const displayColumns = useMemo(() => {
+
+        if (!fcstOnly) {
+            return columns
+        }
+
+        return filterColumnsToResponsibleForecast(
+            columns,
+            responsibleForecastColumnKeys
+        )
+
+    }, [
+        columns,
+        fcstOnly,
+        responsibleForecastColumnKeys
+    ])
+
+    const responsibleForecastCount = responsibleForecastColumnKeys.size
     
 
     /*
@@ -2434,6 +2541,41 @@ export default function CompleteMassive() {
                             </div>
 
                             <div className="flex items-center gap-2">
+                                <Button
+                                    type="button"
+                                    variant={
+                                        fcstOnly
+                                            ? "default"
+                                            : "outline"
+                                    }
+                                    className={
+                                        fcstOnly
+                                            ? "h-10 bg-violet-600 hover:bg-violet-700"
+                                            : "h-10"
+                                    }
+                                    disabled={
+                                        !gridReady ||
+                                        responsibleForecastCount === 0
+                                    }
+                                    onClick={() =>
+                                        setFcstOnly(prev => !prev)
+                                    }
+                                >
+                                    <CalendarClock className="mr-2 h-4 w-4" />
+
+                                    {fcstOnly
+                                        ? "Vista completa"
+                                        : "Solo FCST"
+                                    }
+
+                                    {!fcstOnly &&
+                                        responsibleForecastCount > 0 && (
+                                            <span className="ml-2 rounded-full bg-violet-100 px-2 py-0.5 text-[10px] font-semibold text-violet-700">
+                                                {responsibleForecastCount}
+                                            </span>
+                                        )
+                                    }
+                                </Button>
                                 <Select
                                     value={String(limit)}
                                     onValueChange={
@@ -2528,7 +2670,7 @@ export default function CompleteMassive() {
 
                             <DataGrid
                                 aria-label="Completado masivo"
-                                columns={columns}
+                                columns={displayColumns}
                                 rows={gridRows}
                                 rowKeyGetter={
                                     row => row.instance_id
@@ -2603,13 +2745,14 @@ export default function CompleteMassive() {
                         setChatOpen(open)
                         if (!open) {
                             setChatRow(null)
-                            setChatActivity(null)
+                            setChatTasks([])
+                            setChatTaskCode("")
                         }
                     }}
                 >
-                    <SheetContent
+                   <SheetContent
                         side="right"
-                        className="w-full p-0 sm:max-w-[520px]"
+                        className="flex h-full w-full flex-col p-0 sm:max-w-[520px]"
                     >
                         <SheetHeader className="border-b px-5 py-4">
                             <SheetTitle>
@@ -2643,18 +2786,16 @@ export default function CompleteMassive() {
                                 </Select>
                             )}
                         </SheetHeader>
-                        {chatRow &&
-                            chatActivity && (
-                                <SiteChat
-                                    instanceId={chatRow.instance_id}
-                                    // instance={chatRow}
-                                    // taskCode={chatActivity.task_code}
-                                    taskCode={chatTaskCode}
-                                    currentUser={user}
-                                    compact
-                                    // can={can}
-                                />
-                            )}
+                        {chatRow && chatTaskCode && (
+                            <SiteChat
+                                key={`${chatRow.instance_id}:${chatTaskCode}`}
+                                instanceId={chatRow.instance_id}
+                                taskCode={chatTaskCode}
+                                currentUser={user}
+                                compact
+                                can={can}
+                            />
+                        )}
                     </SheetContent>
                 </Sheet>
             </div>
